@@ -9,7 +9,7 @@ Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.3
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -149,7 +149,7 @@ fi
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(754,root,root)  /etc/rc.d/init.d/%{name}
 %attr(640,root,root)  /etc/logrotate.d/*
 %{_datadir}/mibs/site/*.txt
