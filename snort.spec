@@ -4,6 +4,8 @@
 %bcond_without	mysql # build without MySQL storage support
 %bcond_without	snmp  # build without SNMP support
 #
+%define		_rules_ver	2_2
+
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
@@ -11,14 +13,14 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.2.0
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
 # Source0-md5:	6194278217e4e3f733b046256a31f0e6
-Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-2_1.tar.gz
-# Source1-md5:	a61ea18955871bea5e5042eb5f12b3c7
+Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-%{_rules_ver}.tar.gz
+# Source1-md5:	76fe0c0645f2c96c32a729f78382ddbb
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
