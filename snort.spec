@@ -1,197 +1,182 @@
-Summary: packet-sniffer/logger
-Name: snort
-Version: 1.6.3
-Release: 2
-Copyright: GPL
-Group: Applications/Internet
-Source0: http://www.snort.org/Files/%{name}-%{version}.tar.gz
-Source1: snort-stat
-Source2: snortlog
-Source3: snort-update
-Source4: snortd
-Source5: rules.base
-Source6: README.snort-stuff
-Source7: vision.rules
-Url: http://www.snort.org
-BuildRoot:  %{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-#Requires: libpcap >= 0.4
-#BuildRequires: libpcap >= 0.4
-BuildRequires: libpcap-static
+#
+# Conditional build:
+# _without_pgsql	build without PostgreSQL support
+# _without_mysql	build without MySQL support
+# _without_snmp		without SNMP support
+#
+Summary:	Network intrusion detection system
+Summary(pl):	System wykrywania intruzСw w sieciach
+Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
+Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
+Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
+Name:		snort
+Version:	2.0.0
+Release:	3
+License:	GPL
+Vendor:		Marty Roesch <roesch@sourcefire.com>
+Group:		Networking
+Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
+# snort rules from: Sat Oct 26 14:15:30 2002 GMT
+# http://www.snort.org/dl/signatures/snortrules-stable.tar.gz
+Source1:	%{name}rules-stable-26.10.2002.tar.gz
+Source2:	%{name}.init
+Source3:	%{name}.logrotate
+URL:		http://www.snort.org/
+BuildRequires:	libnet-devel
+BuildRequires:	libpcap-devel
+%{!?_without_mysql:BuildRequires:	mysql-devel}
+%{!?_without_pgsql:BuildRequires:	postgresql-devel}
+BuildRequires:	openssl-devel >= 0.9.6j
+%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
+BuildRequires:	zlib-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
+%{!?_without_mysql:Provides:	snort(mysql) = %{version}}
+%{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
+Prereq:		rc-scripts >= 0.2.0
+Prereq:		/sbin/chkconfig
+Prereq:		%{_sbindir}/useradd
+Prereq:		%{_sbindir}/groupadd
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_sysconfdir	/etc/snort
+%define		_bindir		%{_sbindir}
 
 %description
-Snort is a libpcap-based packet sniffer/logger which 
-can be used as a lightweight network intrusion detection system. 
-It features rules based logging and can perform protocol analysis, 
-content searching/matching and can be used to detect a variety of 
-attacks and probes, such as buffer overflows, stealth port scans, 
-CGI attacks, SMB probes, OS fingerprinting attempts, and much more. 
-Snort has a real-time alerting capabilty, with alerts being sent to syslog, 
-a seperate "alert" file, or as a WinPopup message via Samba's smbclient
-Packager: Henri Gomez <gomez@slib.fr>, William Stearns <wstearns@pobox.com>, and Dave Wreski <dave@linuxsecurity.com>, Wim
-Vandersmissen <wim@bofh.st>
+Snort is an open source network intrusion detection system, capable of
+performing real-time traffic analysis and packet logging on IP
+networks. It can perform protocol analysis and content
+searching/matching in order to detect a variety of attacks and probes,
+such as buffer overflows, stealth port scans, CGI attacks, SMB probes,
+OS fingerprinting attempts, and much more. Snort uses a flexible rules
+language to describe traffic that it should collect or pass, as well
+as a detection engine that utilizes a modular plugin architecture.
+Snort has a real- time alerting capability as well, incorporating
+alerting mechanisms for syslog, user specified files, a UNIX socket,
+or WinPopup messages to Windows clients using Samba's smbclient.
+
+%description -l pl
+Snort to bazuj╠cy na open source NIDS (network intrusion detection
+systems) wykonuj╠cy w czasie rzeczywistym analizЙ ruchu oraz logowanie
+pakietСw w sieciach IP. Jego mo©liwo╤ci to analiza protokoЁu oraz
+zawarto╤ci w poszukiwaniu rС©nego rodzaju atakСw lub prСb takich jak
+przepeЁnienia bufora, skanowanie portСw typu stealth, ataki CGI,
+prСbkowanie SMB, OS fingerprinting i du©o wiЙcej. Snort u©ywa
+elastycznego jЙzyka reguЁek do opisu ruchu, ktСry nale©y
+przeanalizowaФ jak rСwnie© silnika wykrywaj╠cego, wykorzystuj╠cego
+moduЁow╠ architekturЙ. Snort umo©liwia alarmowanie w czasie
+rzeczywistym poprzez sysloga, osobny plik lub jako wiadomo╤Ф WinPopup
+poprzez klienta Samby: smbclient.
+
+%description -l pt_BR
+Snort И um sniffer baseado em libpcap que pode ser usado como um
+pequeno sistema de detecГЦo de intrusos. Tem como caracterМstica o
+registro de pacotes baseado em regras e tambИm pode executar uma
+anАlise do protocolo, pesquisa de padrУes e detectar uma variedade de
+assinaturas de ataques, como estouros de buffer, varreduras "stealth"
+de portas, ataques CGI, pesquisas SMB, tentativas de descobrir o
+sistema operacional e muito mais. Possui um sistema de alerta em tempo
+real, com alertas enviados para o syslog, um arquivo de alertas em
+separado ou como uma mensagem Winpopup.
+
+%description -l ru
+Snort - это сниффер пакетов, который может использоваться как система
+обнаружения попыток вторжения в сеть. Snort поддерживает
+протоколирование пакетов на основе правил, может выполнять анализ
+протоколов, поиск в содержимом пакетов. Может также использоваться для
+обнаружения атак и "разведок", таких как попытки атак типа
+"переполнение буфера", скрытого сканирования портов, CGI атак, SMB
+разведок, попыток обнаружения типа ОС и много другого. Snort может
+информировать о событиях в реальном времени, посылая сообщения в
+syslog, отдельный файл или как WinPopup сообщения через smbclient.
+
+%description -l uk
+Snort - це сн╕фер пакет╕в, що може використовуватись як система
+виявлення спроб вторгнень в мережу. Snort п╕дтриму╓ протоколювання
+пакет╕в на основ╕ правил, може виконувати анал╕з протокол╕в, пошук у
+вм╕ст╕ пакет╕в. Може також використовуватись для виявлення атак та
+"розв╕док", таких як спроби атак типу "переповнення буфера",
+прихованого сканування порт╕в, CGI атак, SMB розв╕док, спроб виявлення
+типу ОС та багато ╕ншого. Snort може ╕нформувати про под╕╖ в реальному
+час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
+пов╕домлення через smbclient.
 
 %prep
-%setup -q 
+%setup -q -a1 
 
 %build
-autoconf
-CFLAGS="$RPM_OPT_FLAGS" \
-%configure --sysconfdir=/etc/snort --enable-smbalerts 
+rm -f missing
+%{__aclocal}
+%{__autoconf}
+%{__automake}
+%configure \
+	--enable-smbalerts \
+	--enable-flexresp \
+	--with%{?_without_snmp:out}-snmp \
+	--without-odbc \
+	--with%{?_without_pgsql:out}-postgresql \
+	--with%{?_without_mysql:out}-mysql
+
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_mandir},%{_sbindir}}
-install -d $RPM_BUILD_ROOT{%{_docdir},/etc/snort,var/log/snort/archive,/etc/rc.d/init.d}
-make DESTDIR=$RPM_BUILD_ROOT prefix=/usr bindir=/usr/sbin sysconfdir=/etc/snort install
-sed -e 's;include ;include /etc/snort/;' < snort-lib > snort-lib.new
-rm -f snort-lib
-mv snort-lib.new snort-lib
-install *-lib $RPM_BUILD_ROOT/etc/snort
-install %{SOURCE1} $RPM_BUILD_ROOT/usr/bin
-install %{SOURCE2} $RPM_BUILD_ROOT/usr/bin
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/sbin
-install %{SOURCE4} $RPM_BUILD_ROOT/etc/rc.d/init.d
-install %{SOURCE5} $RPM_BUILD_ROOT/etc/snort
-install %{SOURCE7} $RPM_BUILD_ROOT/etc/snort
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
+	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
+	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
+install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-						
-%post
-#don't do all this stuff if we are upgrading
-if [ $1 = 1 ] ; then
-useradd -M -r -d /var/log/snort -s /bin/false -c "Snort" snort 2> /dev/null || true
-groupadd -r snort 2> /dev/null || true
-/sbin/chkconfig --add snortd
-#this only works on redhat ;/
-## -- that is ugly.. awk should be muuuch faster
-perl -e 'open(f,"/etc/sysconfig/network-scripts/ifcfg-eth0");
-         while(<f>){if  (/IPADDR=(.*)/) {$internal=$1;}};close(f);
-         open(f,"/etc/resolv.conf");
-         while(<f>){if (/nameserver(.*)/) {$dns=$1;$dns=~s/[ ]+//g;
-         push(@dns,$dns);}} close(f);
-         open(f,">/etc/snort/rules.base");
-         print f "var INTERNAL $internal/32\nvar EXTERNAL any\nvar DNSSERVERS";
-         foreach (@dns) {print f " $_/32";}
-         print f "\n\npreprocessor http_decode: 80 443 8080\npreprocessor minfrag: 128\npreprocessor portscan: \$EXTERNAL 3 5 /var/log/snort/portscan.log\npreprocessor portscan-ignorehosts: \$DNSSERVERS\n\n";
-         close(f);'
-#add the rest of the stuff 
-cat - << EOF >> /etc/snort/rules.base
-# Ruleset, available (updated hourly) from:
-#
-#   http://dev.whitehats.com/ids/vision.rules
 
-# Include the latest copy of Max Vision's ruleset
-include /etc/snort/vision.rules
-
-# Uncomment the next line if you wish to include the latest
-# copy of the snort.org ruleset.  Be sure to download the latest
-# one from http://www.snort.org/snort-files.htm#Rules
-#
-# include /etc/snort/07202k.rules
-
-#
-# If you wish to monitor multiple INTERNAL networks, you can include
-# another variable that defines the additional network, then include
-# the snort ruleset again.  Uncomment the two following lines.
-#
-# var INTERNAL 192.168.2.0/24
-# include /etc/snort/vision.rules
-
-# include other rules here if you wish.
-EOF
+%pre
+if [ -z "`getgid %{name}`" ]; then
+	%{_sbindir}/groupadd -g 46 -r snort 2> /dev/null || true
 fi
 
-chown snort.snort /var/log/snort
+if [ -z "`id -u %{name} 2>/dev/null`" ]; then
+	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
+		-c "SNORT" snort 2> /dev/null || true
+fi
 
-echo -e "
-Be sure to fetch the latest snort rules file from the ArachNIDS
-database by Max Vision, or the one available from the snort.org web
-site.
-
-Included with this RPM is snort-update, a script written by 
-Dave Dittrich that uses wget to regularly download the latest 
-vision.rules file from dev.whitehats.com and alert you if it has 
-been updated.  See the README.snort-stuff for info.
-
-The snortlog and snort-stat perl scripts can be used to generate
-statistics from the snort syslog entries.
-
-Snort is currently configured to listen only on eth0, and assumes
-the use of the ArachNIDS ruleset.  If this is not correct for your 
-system, edit /etc/rc.d/init.d/snortd.
-
-A \"snort\" user and group have been created for snort to run as instead
-of running as root.  You will likely need to create the /var/log/snort 
-directory, and change ownership to the \"snort\" account.
-
-Built by: Dave Wreski
-dave@linuxsecurity.com
-and Wim Vandersmissen <wim@bofh.st>
-"
+%post
+if [ "$1" = "1" ] ; then
+	/sbin/chkconfig --add snort
+	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
+fi
 
 %preun
-/etc/rc.d/init.d/snortd stop
-if [ $1 = 0 ] ; then
-/sbin/chkconfig --del snortd
+if [ "$1" = "0" ] ; then
+	if [ -f /var/lock/subsys/snort ]; then
+		/etc/rc.d/init.d/snort stop 1>&2
+	fi
+	/sbin/chkconfig --del snort
 fi
 
 %postun
-#only if we are removing, not upgrading..
-if [ $1 = 0 ] ; then
-userdel snort 2> /dev/null || true
-groupdel snort 2> /dev/null || true
+if [ "$1" = "0" ] ; then
+	%{_sbindir}/userdel snort 2> /dev/null || true
+	%{_sbindir}/groupdel snort 2> /dev/null || true
 fi
 
 %files
-%defattr(-,root,root)
-%doc AUTHORS BUGS COPYING CREDITS ChangeLog INSTALL NEWS README* USAGE
-%doc $RPM_SOURCE_DIR/README.snort-stuff
-%attr(755,root,root)       /usr/sbin/*
-%attr(755,root,root) 	   /usr/bin/*
-#%attr(750,root,wheel)  %dir /var/log/snort
-# cos mu nie pasuje..
-#%attr(750,root,wheel)  %dir /var/log/snort/archive
-%attr(640,root,wheel) %config /etc/snort/*-lib
-%attr(640,root,wheel) %config /etc/snort/vision.rules
-%attr(640,root,wheel) %config(noreplace)     /etc/snort/rules.base
-%attr(750,root,root)   /etc/rc.d/init.d/snortd
-
-%changelog
-* Fri Nov  3 2000 agaran
-- i changed some..
-
-* Tue Jul 25 2000 Wim Vandersmissen <wim@bofh.st>
-- Added some checks to find out if we're upgrading or removing the package
-
-* Sat Jul 22 2000 Wim Vandersmissen <wim@bofh.st>
-- Updated to version 1.6.3
-- Fixed the user/group stuff (moved to %post)
-- Added userdel/groupdel to %postun
-- Automagically adds the right IP, nameservers to /etc/snort/rules.base
-
-* Sat Jul 08 2000 Dave Wreski <dave@linuxsecurity.com>
-- Updated to version 1.6.2
-- Removed references to xntpd
-- Fixed minor problems with snortd init script
-
-* Fri Jul 07 2000 Dave Wreski <dave@linuxsecurity.com>
-- Updated to version 1.6.1
-- Added user/group snort
-
-* Sat Jun 10 2000 Dave Wreski <dave@linuxsecurity.com>
-- Added snort init.d script (snortd)
-- Added Dave Dittrich's snort rules header file (ruiles.base)
-- Added Dave Dittrich's wget rules fetch script (check-snort)
-- Fixed permissions on /var/log/snort
-- Created /var/log/snort/archive for archival of snort logs
-- Added post/preun to add/remove snortd to/from rc?.d directories
-- Defined configuration files as %config
-
-* Tue Mar 28 2000 William Stearns <wstearns@pobox.com>
-- Quick update to 1.6.
-- Sanity checks before doing rm-rf in install and clean
-
-* Fri Dec 10 1999 Henri Gomez <gomez@slib.fr>
-- 1.5-0 Initial RPM release
+%defattr(644,root,root,755)
+%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
+%doc contrib/create* doc/*.pdf
+%attr(755,root,root)  %{_sbindir}/*
+%attr(770,root,snort) %dir %{_var}/log/%{name}
+%attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
+%attr(750,root,snort) %dir %{_sysconfdir}
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+%attr(754,root,root)  /etc/rc.d/init.d/%{name}
+%attr(640,root,root)  /etc/logrotate.d/*
+%{_datadir}/mibs/site/*.txt
+%{_mandir}/man?/*

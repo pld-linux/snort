@@ -2,7 +2,7 @@
 #
 # snort         Start/Stop the snort IDS daemon.
 #
-# chkconfig: 2345 40 60
+# chkconfig: 2345 85 24
 # description:  snort is a lightweight network intrusion detection tool that
 #		currently detects more than 1100 host and network
 #		vulnerabilities, portscans, backdoors, and more.
@@ -10,6 +10,7 @@
 
 # Source function library.
 . /etc/rc.d/init.d/functions
+. /etc/sysconfig/network
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/snort ] && . /etc/sysconfig/snort
@@ -32,9 +33,10 @@ case "$1" in
         if [ ! -f /var/lock/subsys/snort ]; then
                 # show "Starting %s service." <service>
                 msg_starting snort
-                daemon \
-			snort -u snort -g snort -s -d -D \
-			-l /var/log/snort -c /etc/snort/rules.base
+		# we need full path here; see SnortUsersManual.pdf
+                daemon 	/usr/sbin/snort \
+			-u snort -g snort -d -D \
+			-l /var/log/snort -c /etc/snort/snort.conf
                 RETVAL=$?
                 [ $RETVAL -eq 0 ] && touch /var/lock/subsys/snort
         else
@@ -57,6 +59,11 @@ case "$1" in
                 exit 1
         fi
 	;;
+  reload)
+	msg_reloading snort
+	killproc snort -HUP
+	RETVAL=$?
+	;;
   restart)
 	$0 stop
 	$0 start
@@ -65,7 +72,7 @@ case "$1" in
 	status snort
 	;;
   *)
-	echo "Usage: $0 {start|stop|restart|status}"
+	echo "Usage: $0 {start|stop|reload|restart|status}"
 	exit 1
 esac
 

@@ -1,0 +1,22 @@
+--- snort-1.8.6/configure.in~	Sat Oct 19 14:46:34 2002
++++ snort-1.8.6/configure.in	Sat Oct 19 14:46:34 2002
+@@ -840,9 +840,14 @@
+ CPPFLAGS=`echo $CPPFLAGS | sed -e 's/-I\/usr\/include //g'`
+ 
+ AC_PROG_INSTALL
+-AC_OUTPUT(Makefile win32/Makefile win32/WIN32-Code/Makefile \
+-win32/WIN32-Includes/Makefile win32/WIN32-Libraries/Makefile \
+-win32/WIN32-Includes/Makefile win32/WIN32-Includes/libnet/Makefile \
+-win32/WIN32-Includes/mysql/Makefile win32/WIN32-Includes/rpc/Makefile \
+-win32/WIN32-Libraries/Makefile)
++AC_OUTPUT([
++	Makefile 
++	win32/Makefile
++	win32/WIN32-Code/Makefile
++	win32/WIN32-Includes/libnet/Makefile
++	win32/WIN32-Includes/Makefile
++	win32/WIN32-Includes/mysql/Makefile
++	win32/WIN32-Includes/rpc/Makefile
++	win32/WIN32-Libraries/Makefile
++])
+ 
