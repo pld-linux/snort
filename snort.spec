@@ -30,7 +30,7 @@ a seperate "alert" file, or as a WinPopup message via Samba's smbclient
 %build
 CFLAGS="$RPM_OPT_FLAGS" \
 ./configure --prefix=/usr --bindir=/usr/sbin --sysconfdir=/etc/snort --enable-smbalerts
-make
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
