@@ -2,7 +2,7 @@
 #
 # snort         Start/Stop the snort IDS daemon.
 #
-# chkconfig: 2345 40 60
+# chkconfig: 2345 85 24
 # description:  snort is a lightweight network intrusion detection tool that
 #		currently detects more than 1100 host and network
 #		vulnerabilities, portscans, backdoors, and more.
