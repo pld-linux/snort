@@ -10,15 +10,15 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.0.5
-Release:	1
+Version:	2.1.0
+Release:	0.1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# Source0-md5:	f129ee00a3d6e7b7c1ff4a1e1fba3a08
+# Source0-md5:	1da6d683d18b39a72a3c277e8deffc69
 Source1:	http://www.snort.org/dl/rules/%{name}rules-stable.tar.gz
-# Source1-md5:	3675870ff4cf81f11e796edca4212d3f
+# Source1-md5:	ba533cbb63c7ac78fb1b0ac1b9336de4
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -32,6 +32,7 @@ BuildRequires:	libpcap-devel
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7c
 %{?with_pgsql:BuildRequires:	postgresql-devel}
+BuildRequires:	pcre-devel
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts >= 0.2.0
 Requires(pre):	/usr/bin/getgid
