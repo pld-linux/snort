@@ -35,7 +35,6 @@ BuildRequires:	autoconf
 Prereq:		rc-scripts >= 0.2.0
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
-Prereq:		/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
