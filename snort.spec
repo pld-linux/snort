@@ -1,12 +1,11 @@
 # _without_pgsql - build without PostgreSQL support
 # _with_mysql	- build MySQL support
 Summary:	Network intrusion detection system
-Summary(es):	Lightweight intrusion detection sniffer
 Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.1
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -28,6 +27,8 @@ BuildRequires:	ucd-snmp-devel
 BuildRequires:	zlib-devel
 BuildRequires:	sed
 BuildRequires:	autoconf
+%{?_with_mysql:Provides:	snort(mysql) = %{version}}
+%{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
@@ -50,16 +51,6 @@ Snort has a real- time alerting capability as well, incorporating
 alerting mechanisms for syslog, user specified files, a UNIX socket,
 or WinPopup messages to Windows clients using Samba's smbclient.
 
-%description -l es
-Snort is a libpcap-based packet sniffer/logger which can be used as a
-lightweight network intrusion detection system. It features rules
-based logging and can perform protocol analysis, content
-searching/matching and can be used to detect a variety of attacks and
-probes, such as buffer overflows, stealth port scans, CGI attacks, SMB
-probes, OS fingerprinting attempts, and much more. Snort has a
-real-time alerting capabilty, with alerts being sent to syslog, a
-separate "alert" file, or as a WinPopup message via Samba's smbclient
-
 %description -l pl
 Snort to bazuj±cy na open source NIDS (network intrusion detection
 systems) wykonuj±cy w czasie rzeczywistym analizê ruchu oraz logowanie
@@ -69,7 +60,7 @@ przepe³nienia bufora, skanowanie portów typu stealth, ataki CGI,
 próbkowanie SMB, OS fingerprinting i du¿o wiêcej. Snort u¿ywa
 elastycznego jêzyka regu³ek do opisu ruchu, który nale¿y
 przeanalizowaæ jak równie¿ silnika wykrywaj±cego, wykorzystuj±cego
-modu³ow± architektórê. Snort umo¿liwia alarmowanie w czasie
+modu³ow± architekturê. Snort umo¿liwia alarmowanie w czasie
 rzeczywistym poprzez sysloga, osobny plik lub jako wiadomo¶æ WinPopup
 poprzez klienta Samby: smbclient.
 
