@@ -10,13 +10,14 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	1.8.6
-Release:	2
+Version:	1.9.1
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Source0:	http://www.snort.org/releases/%{name}-%{version}.tar.gz
-Source1:	http://www.snort.org/downloads/%{name}rules.tar.gz
+Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
+# snort rules from: Sat Oct 26 14:15:30 2002 GMT
+Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
@@ -24,8 +25,8 @@ BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	openssl-devel >= 0.9.6a
-%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.5}
+BuildRequires:	openssl-devel >= 0.9.6g
+%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -104,9 +105,9 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 
 %build
 rm -f missing
-aclocal
-autoconf
-automake -a -c -f
+%{__aclocal}
+%{__autoconf}
+%{__automake}
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
@@ -126,12 +127,11 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install MIBS/*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
-install rules/*		$RPM_BUILD_ROOT%{_sysconfdir}
+install etc/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-
-gzip -9nf AUTHORS BUGS ChangeLog CREDITS NEWS README* RULES* USAGE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -168,7 +168,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz contrib/create* *.pdf
+%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
+%doc contrib/create* doc/*.pdf
 %attr(755,root,root)  %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
