@@ -18,8 +18,7 @@ Source4:	%{name}-update
 Source5:	%{name}.logrotate
 Patch0:		%{name}-configure.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-# shared libnet is broken
-BuildRequires:	libnet-static
+BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 BuildRequires:	mysql-devel
 BuildRequires:	sed
@@ -91,8 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 if [ -z "`getgid %{name}`" ]; then
 	%{_sbindir}/groupadd -g 46 -r snort 2> /dev/null || true
 fi
+
 if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	%{_sbindir}/useradd -u 46 -M -r -d %{_var}/log/%{name} -s /bin/false \
+	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
 		-c "SNORT" snort 2> /dev/null || true
 fi
 	
