@@ -38,7 +38,7 @@ mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
 mkdir -p $RPM_BUILD_ROOT/etc/snort
 mkdir -p $RPM_BUILD_ROOT/var/log/snort
-make prefix=$RPM_BUILD_ROOT/usr bindir=$RPM_BUILD_ROOT/usr/sbin sysconfdir=$RPM_BUILD_ROOT/etc/snort install
+%{__make} prefix=$RPM_BUILD_ROOT/usr bindir=$RPM_BUILD_ROOT/usr/sbin sysconfdir=$RPM_BUILD_ROOT/etc/snort install
 sed -e 's;include ;include /etc/snort/;' < snort-lib > snort-lib.new
 rm -f snort-lib
 mv snort-lib.new snort-lib
