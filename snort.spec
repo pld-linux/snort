@@ -7,9 +7,11 @@
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
+Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
+Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	1.8.3
-Release:	4
+Version:	1.8.6
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -74,6 +76,28 @@ de portas, ataques CGI, pesquisas SMB, tentativas de descobrir o
 sistema operacional e muito mais. Possui um sistema de alerta em tempo
 real, com alertas enviados para o syslog, um arquivo de alertas em
 separado ou como uma mensagem Winpopup.
+
+%description -l ru
+Snort - это сниффер пакетов, который может использоваться как система
+обнаружения попыток вторжения в сеть. Snort поддерживает
+протоколирование пакетов на основе правил, может выполнять анализ
+протоколов, поиск в содержимом пакетов. Может также использоваться для
+обнаружения атак и "разведок", таких как попытки атак типа
+"переполнение буфера", скрытого сканирования портов, CGI атак, SMB
+разведок, попыток обнаружения типа ОС и много другого. Snort может
+информировать о событиях в реальном времени, посылая сообщения в
+syslog, отдельный файл или как WinPopup сообщения через smbclient.
+
+%description -l uk
+Snort - це сн╕фер пакет╕в, що може використовуватись як система
+виявлення спроб вторгнень в мережу. Snort п╕дтриму╓ протоколювання
+пакет╕в на основ╕ правил, може виконувати анал╕з протокол╕в, пошук у
+вм╕ст╕ пакет╕в. Може також використовуватись для виявлення атак та
+"розв╕док", таких як спроби атак типу "переповнення буфера",
+прихованого сканування порт╕в, CGI атак, SMB розв╕док, спроб виявлення
+типу ОС та багато ╕ншого. Snort може ╕нформувати про под╕╖ в реальному
+час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
+пов╕домлення через smbclient.
 
 %prep
 %setup -q -a1
