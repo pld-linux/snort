@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# snort		Start/Stop the snort IDS daemon.
+#
+# chkconfig:	2345 85 24
+# description:	snort is a lightweight network intrusion detection tool that
+#		currently detects more than 1100 host and network
+#		vulnerabilities, portscans, backdoors, and more.
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+. /etc/sysconfig/network
+
+# Get service config - may override defaults
+[ -f /etc/sysconfig/snort ] && . /etc/sysconfig/snort
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		# nls "ERROR: Networking is down. %s can't be run." <service>
+		msg_network_down snort
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/snort ]; then
+		# show "Starting %s service." <service>
+		msg_starting snort
+		# we need full path here; see SnortUsersManual.pdf
+		daemon 	/usr/sbin/snort \
+			-u snort -g snort -d -D \
+			-l /var/log/snort -c /etc/snort/snort.conf
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snort
+	else
+		# show "%s service is already running." <service>
+		msg_already_running snort
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/snort ]; then
+		# Stop daemons.
+		# show "Stopping %s service" <service>
+		msg_stopping snort
+		killproc snort
+		rm -f /var/lock/subsys/snort
+	else
+		msg_not_running snort
+	fi
+	;;
+  reload|force-reload)
+	if [ -f /var/lock/subsys/snort ]; then
+		msg_reloading snort
+		killproc snort -HUP
+		RETVAL=$?
+	else
+		# show "%s service is not running." <service>
+		msg_not_running snort >&2
+		exit 7
+	fi
+	;;
+  restart)
+	$0 stop
+	$0 start
+	exit $?
+	;;
+  status)
+	status snort
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL
