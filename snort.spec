@@ -18,7 +18,7 @@ Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
 # Source0-md5:	76a538d27c23d51dbed43b04c06114e1
 Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-2_1.tar.gz
-# Source1-md5:	fec9dbeb82a845573720e4bf834739e4
+# Source1-md5:	781771b7267706539642c644198e622e
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
