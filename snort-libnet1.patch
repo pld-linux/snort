@@ -1,19 +1,42 @@
-diff -Nur snort-2.0.0.org/configure.in snort-2.0.0/configure.in
---- snort-2.0.0.org/configure.in	2003-04-09 16:01:26.000000000 +0000
-+++ snort-2.0.0/configure.in	2003-07-03 22:28:27.000000000 +0000
-@@ -569,25 +569,25 @@
+diff -Nur snort-2.0.0.org/src/detection-plugins/sp_react.c snort-2.0.0/src/detection-plugins/sp_react.c
+--- snort-2.0.0.org/src/detection-plugins/sp_react.c	2003-04-03 21:10:52.000000000 +0000
++++ snort-2.0.0/src/detection-plugins/sp_react.c	2003-07-03 22:31:13.000000000 +0000
+@@ -53,7 +53,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <ctype.h>
+-#include <libnet.h>
++#include <libnet1.h>
+ 
+ #include "rules.h"
+ #include "decode.h"
+diff -Nur snort-2.0.0.org/src/detection-plugins/sp_respond.c snort-2.0.0/src/detection-plugins/sp_respond.c
+--- snort-2.0.0.org/src/detection-plugins/sp_respond.c	2003-04-03 21:10:52.000000000 +0000
++++ snort-2.0.0/src/detection-plugins/sp_respond.c	2003-07-03 22:30:57.000000000 +0000
+@@ -30,7 +30,7 @@
+ 
+ 
+ #ifdef ENABLE_RESPONSE
+-#include <libnet.h>
++#include <libnet1.h>
+ 
+ #include "decode.h"
+ #include "rules.h"
+--- snort-2.0.1/configure.in.orig	2003-08-07 12:28:49.000000000 +0200
++++ snort-2.0.1/configure.in	2003-08-07 12:53:49.000000000 +0200
+@@ -598,26 +598,25 @@
  
  AC_ARG_ENABLE(flexresp,
  [  --enable-flexresp       Flexible Responses on hostile connection attempts],
 -[ CPPFLAGS="${CPPFLAGS} -DENABLE_RESPONSE `libnet-config --defines --cflags`" LDFLAGS="${LDFLAGS} `libnet-config --libs`"],)
+-                
 +[ CPPFLAGS="${CPPFLAGS} -DENABLE_RESPONSE `libnet1-config --defines --cflags`" LDFLAGS="${LDFLAGS} `libnet1-config --libs`"],)
-                 
  
  if test "$enable_flexresp" != "no" -a "$enable_flexresp" = "yes"; then
  
 -  if test `libnet-config --cflags | wc -c` = "1"; then
 +  if test `libnet1-config --cflags | wc -c` = "1"; then
-     CFLAGS="${CFLAGS} -I/usr/local/include"
+     CPPFLAGS="${CPPFLAGS} -I/usr/local/include -I/sw/include"
      LIBNET_CONFIG_BROKEN_CFLAGS=yes
    fi
  
@@ -23,17 +46,25 @@ diff -Nur snort-2.0.0.org/configure.in snort-2.0.0/configure.in
 +    AC_MSG_WARN(libnet1-config --libs is broken on your system.  If you)
      AC_MSG_WARN(are using a precompiled package please notify the) 
      AC_MSG_WARN(maintainer.)
-     LDFLAGS="${LDFLAGS} -L/usr/local/lib"
+     LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
+     LIBS="${LIBS} -lnet"
    fi
  
-   LNET=""
+-  LNET=""
 -  AC_CHECK_HEADERS(libnet.h,, LNET="no")
++  LNET="yes"
 +  AC_CHECK_HEADERS(libnet1.h,, LNET="no")
    if test "$LNET" = "no"; then
      echo
      echo "   ERROR!  Libnet header not found, go get it from"
-@@ -605,29 +605,29 @@
-       libnet_dir="/usr/include /usr/local/include"
+@@ -630,38 +629,38 @@
+   AC_MSG_CHECKING(for libnet version 1.0.2a)
+   if test "${LIBNET_CONFIG_BROKEN_CFLAGS}" = "yes"; then
+     if test -n "$with_libnet_includes" -a "$with_libnet_includes" != "no"; then
+-      libnet_dir="${with_libnet_includes}"
++      libnet_dir="${with_libnet1_includes}"
+     else
+       libnet_dir="/usr/include /usr/local/include /sw/include"
      fi
    else
 -    libnet_dir=`libnet-config --cflags | cut -dI -f2`
@@ -67,27 +98,8 @@ diff -Nur snort-2.0.0.org/configure.in snort-2.0.0/configure.in
    fi
  
    LNET=""
-diff -Nur snort-2.0.0.org/src/detection-plugins/sp_react.c snort-2.0.0/src/detection-plugins/sp_react.c
---- snort-2.0.0.org/src/detection-plugins/sp_react.c	2003-04-03 21:10:52.000000000 +0000
-+++ snort-2.0.0/src/detection-plugins/sp_react.c	2003-07-03 22:31:13.000000000 +0000
-@@ -53,7 +53,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <ctype.h>
--#include <libnet.h>
-+#include <libnet1.h>
- 
- #include "rules.h"
- #include "decode.h"
-diff -Nur snort-2.0.0.org/src/detection-plugins/sp_respond.c snort-2.0.0/src/detection-plugins/sp_respond.c
---- snort-2.0.0.org/src/detection-plugins/sp_respond.c	2003-04-03 21:10:52.000000000 +0000
-+++ snort-2.0.0/src/detection-plugins/sp_respond.c	2003-07-03 22:30:57.000000000 +0000
-@@ -30,7 +30,7 @@
- 
- 
- #ifdef ENABLE_RESPONSE
--#include <libnet.h>
-+#include <libnet1.h>
- 
- #include "decode.h"
- #include "rules.h"
+-  AC_CHECK_LIB(net, libnet_build_ip,, LNET="no")
++  AC_CHECK_LIB(net1, libnet1_build_ip,, LNET="no")
+   if test "$LNET" = "no"; then
+     echo
+     echo "   ERROR!  Libnet library not found, go get it from"
