@@ -8,7 +8,7 @@ Source0: http://www.clark.net/~roesch/%{name}-%{version}.tar.gz
 Source1: snort-stat
 Source2: snortlog
 Url: http://www.clark.net/~roesch/security.html
-BuildRoot: /var/tmp/%{name}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Prefix: /usr
 Packager: Henri Gomez <gomez@slib.fr>
 Requires: libpcap >= 0.4
@@ -23,7 +23,6 @@ attacks and probes, such as buffer overflows, stealth port scans,
 CGI attacks, SMB probes, OS fingerprinting attempts, and much more. 
 Snort has a real-time alerting capabilty, with alerts being sent to syslog, 
 a seperate "alert" file, or as a WinPopup message via Samba's smbclient
-
 
 %prep
 %setup -q 
