@@ -34,20 +34,23 @@ BuildRequires:	libpcap-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7d
-%{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	pcre-devel
+%{?with_pgsql:BuildRequires:	postgresql-devel}
+BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts >= 0.2.0
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires:	libnet1 = 1.0.2a
+Provides:	group(snort)
 %{?with_mysql:Provides:	snort(mysql) = %{version}}
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
+Provides:	user(snort)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -157,13 +160,22 @@ install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -z "`getgid %{name}`" ]; then
-	/usr/sbin/groupadd -g 46 -r snort 2> /dev/null || true
+if [ -n "`/usr/bin/getgid snort`" ]; then
+	if [ "`/usr/bin/getgid snort`" != "46" ]; then
+		echo "Error: group snort doesn't have gid=46. Correct this before installing %{name}." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/groupadd -g 46 -r snort 1>&2
 fi
-
-if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	/usr/sbin/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
-		-c "SNORT" snort 2> /dev/null || true
+if [ -n "`/bin/id -u snort 2>/dev/null`" ]; then
+	if [ "`/bin/id -u snort`" != "46" ]; then
+		echo "Error: user snort doesn't have uid=46. Correct this before installing %{name}." 1>&2
+		exit 1
+	fi
+else
+	/usr/sbin/useradd -u 46 -g snort -M -r -d %{_var}/log/snort \
+		-s /bin/false -c "SNORT" snort 1>&2
 fi
 
 %post
@@ -187,8 +199,8 @@ fi
 
 %postun
 if [ "$1" = "0" ] ; then
-	/usr/sbin/userdel snort 2> /dev/null || true
-	/usr/sbin/groupdel snort 2> /dev/null || true
+	%userremove snort
+	%groupremove snort
 fi
 
 %files
@@ -196,7 +208,7 @@ fi
 %doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,TODO,USAGE}
 %doc contrib/create* doc/*.pdf
 %attr(755,root,root) %{_sbindir}/*
-%attr(770,root,snort) %dir %{_var}/log/%{name}
+%attr(770,root,snort) %dir %{_var}/log/snort
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/unicode.map
