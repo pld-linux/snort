@@ -9,7 +9,7 @@ Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.1
-Release:	4
+Release:	5
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -33,6 +33,7 @@ BuildRequires:	autoconf
 %{?_with_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
+Prereq:		/sbin/chkconfig
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
