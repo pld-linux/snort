@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# snort         Start/Stop the snort IDS daemon.
+# snort		Start/Stop the snort IDS daemon.
 #
-# chkconfig: 2345 85 24
-# description:  snort is a lightweight network intrusion detection tool that
+# chkconfig:	2345 85 24
+# description:	snort is a lightweight network intrusion detection tool that
 #		currently detects more than 1100 host and network
 #		vulnerabilities, portscans, backdoors, and more.
 #
@@ -17,52 +17,54 @@
 
 # Check that networking is up.
 if is_yes "${NETWORKING}"; then
-        if [ ! -f /var/lock/subsys/network ]; then
-                # nls "ERROR: Networking is down. %s can't be run." <service>
-                msg_network_down snort
-                exit 1
-        fi
+	if [ ! -f /var/lock/subsys/network ]; then
+		# nls "ERROR: Networking is down. %s can't be run." <service>
+		msg_network_down snort
+		exit 1
+	fi
 else
-        exit 0
+	exit 0
 fi
 
 # See how we were called.
 case "$1" in
   start)
-        # Check if the service is already running?
-        if [ ! -f /var/lock/subsys/snort ]; then
-                # show "Starting %s service." <service>
-                msg_starting snort
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/snort ]; then
+		# show "Starting %s service." <service>
+		msg_starting snort
 		# we need full path here; see SnortUsersManual.pdf
-                daemon 	/usr/sbin/snort \
+		daemon 	/usr/sbin/snort \
 			-u snort -g snort -d -D \
 			-l /var/log/snort -c /etc/snort/snort.conf
-                RETVAL=$?
-                [ $RETVAL -eq 0 ] && touch /var/lock/subsys/snort
-        else
-                # show "%s service is already running." <service>
-                msg_already_running snort
-                exit 1
-        fi
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/snort
+	else
+		# show "%s service is already running." <service>
+		msg_already_running snort
+		exit 1
+	fi
 	;;
   stop)
-        # Stop daemons.
-        # show "Stopping %s service" <service>
-        if [ -f /var/lock/subsys/snort ]; then
-                msg_stopping snort
-                killproc snort
-                RETVAL=$?
-                rm -f /var/lock/subsys/snort
-        else
-                # show "%s service is not running." <service>
-                msg_not_running snort
-                exit 1
-        fi
+	# Stop daemons.
+	# show "Stopping %s service" <service>
+	if [ -f /var/lock/subsys/snort ]; then
+		msg_stopping snort
+		killproc snort
+		RETVAL=$?
+		rm -f /var/lock/subsys/snort
+	else
+		# show "%s service is not running." <service>
+		msg_not_running snort
+		exit 1
+	fi
 	;;
   reload)
 	msg_reloading snort
+	busy
 	killproc snort -HUP
 	RETVAL=$?
+	[ $RETVAL -eq 0 ] && ok || died
 	;;
   restart)
 	$0 stop
