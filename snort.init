@@ -26,7 +26,7 @@ else
 	exit 0
 fi
 
-
+RETVAL=0
 # See how we were called.
 case "$1" in
   start)
@@ -43,7 +43,6 @@ case "$1" in
 	else
 		# show "%s service is already running." <service>
 		msg_already_running snort
-		exit 1
 	fi
 	;;
   stop)
@@ -52,8 +51,10 @@ case "$1" in
 		# show "Stopping %s service" <service>
 		msg_stopping snort
 		killproc snort
-		RETVAL=$?
 		rm -f /var/lock/subsys/snort
+	else
+		msg_not_running snort
+	fi
 	;;
   reload|force-reload)
 	if [ -f /var/lock/subsys/snort ]; then
@@ -62,20 +63,22 @@ case "$1" in
 		RETVAL=$?
 	else
 		# show "%s service is not running." <service>
-		msg_not_running snort
-		exit 1
+		msg_not_running snort >&2
+		exit 7
 	fi
 	;;
   restart)
 	$0 stop
 	$0 start
+	exit $?
 	;;
   status)
 	status snort
+	exit $?
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
-	exit 1
+	exit 3
 esac
 
 exit $RETVAL
