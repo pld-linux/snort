@@ -185,7 +185,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
+%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,TODO,USAGE}
 %doc contrib/create* doc/*.pdf
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
