@@ -165,7 +165,8 @@ fi
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
-	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
+	touch %{_var}/log/%{name}
+	chown snort:snort %{_var}/log/%{name}
 fi
 if [ -f /var/lock/subsys/snort ]; then
         /etc/rc.d/init.d/snort restart 1>&2
