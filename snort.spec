@@ -1,6 +1,3 @@
-# TODO: fix /var/log/snort permissions
-#	(770 root.snort in %files, chowned to snort.snort in %post)
-#
 # Conditional build:
 # _without_pgsql	build without PostgreSQL support
 # _without_mysql	build without MySQL support
@@ -13,7 +10,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.1
-Release:	0.1
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -123,6 +120,7 @@ no_libnsl=yes; export no_libnsl
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
+	--with-libnet-includes=/usr/include/libnet1 \
 	--with%{?_without_snmp:out}-snmp \
 	--without-odbc \
 	--with%{?_without_pgsql:out}-postgresql \
@@ -140,7 +138,6 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
 install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -163,8 +160,6 @@ fi
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
-	touch %{_var}/log/%{name}
-	chown snort:snort %{_var}/log/%{name}
 fi
 if [ -f /var/lock/subsys/snort ]; then
         /etc/rc.d/init.d/snort restart 1>&2
@@ -200,5 +195,4 @@ fi
 %attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(754,root,root)  /etc/rc.d/init.d/%{name}
 %attr(640,root,root)  /etc/logrotate.d/*
-%{_datadir}/mibs/site/*.txt
 %{_mandir}/man?/*
