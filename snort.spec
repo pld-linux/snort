@@ -8,14 +8,14 @@
 %define		_rules_ver	CURRENT
 %define		_rc		RC1
 
-Summary:	Network intrusion detection system
-Summary(pl):	System wykrywania intruzСw w sieciach
+Summary:	Network intrusion detection system (IDS/IPS)
+Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.3.0
-Release:	0.%{_rc}.3
+Release:	0.%{_rc}.4%{?_with_inline:_inline}
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
