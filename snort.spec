@@ -9,15 +9,15 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.0.5
+Version:	2.1.0
 Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# Source0-md5:	f129ee00a3d6e7b7c1ff4a1e1fba3a08
+# Source0-md5:	1da6d683d18b39a72a3c277e8deffc69
 Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
-# Source1-md5:	43ea75ee2e16d582aa39f85d63eb964e
+# Source1-md5:	5c7cc3496e9fe3c780a9dbfec3b73460
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -30,6 +30,7 @@ BuildRequires:	libpcap-devel
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6k
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
+BuildRequires:	pcre-devel
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts >= 0.2.0
 Requires(pre):	/usr/bin/getgid
@@ -181,7 +182,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
+%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,TODO,USAGE}
 %doc contrib/create* doc/*.pdf
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
