@@ -1,0 +1,36 @@
+#
+# Taken and modified from "vision.conf", part of Max Vision's
+# ArachNIDs work.  See /usr/doc/snort-stuff/README.snort-stuff for more
+# information on how to use this file.
+
+var INTERNAL 192.168.1.0/24
+var EXTERNAL 63.87.101.0/24
+var DNSSERVERS 63.87.101.90/32 63.87.101.92/32
+
+preprocessor http_decode: 80 443 8080
+preprocessor minfrag: 128
+preprocessor portscan: $EXTERNAL 3 5 /var/log/snort/portscan.log
+preprocessor portscan-ignorehosts: $DNSSERVERS
+
+# Ruleset, available (updated hourly) from:
+#
+#   http://dev.whitehats.com/ids/vision.rules
+
+# Include the latest copy of Max Vision's ruleset
+include /etc/snort/vision.rules
+
+# Uncomment the next line if you wish to include the latest
+# copy of the snort.org ruleset.  Be sure to download the latest
+# one from http://www.snort.org/snort-files.htm#Rules
+#
+# include /etc/snort/06082k.rules
+
+#
+# If you wish to monitor multiple INTERNAL networks, you can include
+# another variable that defines the additional network, then include
+# the snort ruleset again.  Uncomment the two following lines.
+#
+# var INTERNAL 192.168.2.0/24
+# include /etc/snort/vision.rules
+
+# include other rules here if you wish.
