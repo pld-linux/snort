@@ -25,6 +25,7 @@ BuildRequires:	libpcap-devel
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	ucd-snmp-devel
+BuildRequires:	zlib-devel
 BuildRequires:	sed
 BuildRequires:	autoconf
 Prereq:		rc-scripts >= 0.2.0
