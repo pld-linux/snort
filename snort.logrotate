@@ -1,7 +1,0 @@
-/var/log/snort {
-	olddir /var/log/archiv/snort
-	postrotate
-		/bin/killall -HUP snort
-	endscript
-}
-
