@@ -1,8 +1,8 @@
 # Conditional build:
-# _without_pgsql	build without PostgreSQL support
-# _without_mysql	build without MySQL support
-# _without_snmp		without SNMP support
-#
+%bcond_without	pgsql # build without PostgreSQL support
+%bcond_without	mysql # build without MySQL support
+%bcond_without	snmp  # without SNMP support
+
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
@@ -10,14 +10,14 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.1
-Release:	3
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
 # Source0-md5:	ab5bdd0cab96fe521d11d2c6d804518f
 Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
-# Source1-md5:	b7f033340b8fec21a1dfd7f86badac54
+# Source1-md5:	864eedb3122a1fe89c85669cc7d287e9
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -27,10 +27,10 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libnet1-devel
 BuildRequires:	libpcap-devel
-%{!?_without_mysql:BuildRequires:	mysql-devel}
-%{!?_without_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
+%{?with_mysql:BuildRequires:	mysql-devel}
+%{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7b
-%{!?_without_pgsql:BuildRequires:	postgresql-devel}
+%{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts >= 0.2.0
 Requires(pre):	/usr/bin/getgid
@@ -40,8 +40,8 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
-%{!?_without_mysql:Provides:	snort(mysql) = %{version}}
-%{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
+%{?with_mysql:Provides:	snort(mysql) = %{version}}
+%{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -121,10 +121,10 @@ no_libnsl=yes; export no_libnsl
 	--enable-smbalerts \
 	--enable-flexresp \
 	--with-libnet-includes=/usr/include/libnet1 \
-	--with%{?_without_snmp:out}-snmp \
+	--with%{!?with_snmp:out}-snmp \
 	--without-odbc \
-	--with%{?_without_pgsql:out}-postgresql \
-	--with%{?_without_mysql:out}-mysql
+	--with%{!?with_pgsql:out}-postgresql \
+	--with%{!?with_mysql:out}-mysql
 
 %{__make}
 
@@ -193,6 +193,6 @@ fi
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(640,root,snort) %{_sysconfdir}/rules/*
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(750,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) /etc/logrotate.d/*
 %{_mandir}/man?/*
