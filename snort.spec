@@ -4,7 +4,7 @@
 %bcond_without	mysql	# build without MySQL storage support
 %bcond_without	snmp	# build without SNMP support
 #
-%define		_rules_ver	2_2
+%define		_rules_ver	CURRENT
 %define		_rc		RC1
 
 Summary:	Network intrusion detection system
@@ -14,14 +14,14 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.3.0
-Release:	0.%{_rc}.1
+Release:	0.%{_rc}.2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}%{_rc}.tar.gz
 # Source0-md5:	c86ef4bd8f0e0eac102686a15f40ada8
 Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-%{_rules_ver}.tar.gz
-# Source1-md5:	2e9947fb4bb2dc8ccdb6dc1e92832efb
+# Source1-md5:	4e8d46d38d9da270749ab0f13797b7b0
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -207,7 +207,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,TODO,USAGE}
-%doc contrib/create* doc/*.pdf
+%doc doc/*.pdf
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
