@@ -5,9 +5,6 @@
 %bcond_without	snmp	# build without SNMP support
 %bcond_with	inline	# build with inline support
 #
-%define		_rules_ver	CURRENT
-%define		_rc		RC2
-
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
@@ -15,14 +12,14 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.3.0
-Release:	0.%{_rc}.1%{?_with_inline:_inline}
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Source0:	http://www.snort.org/dl/%{name}-%{version}%{_rc}.tar.gz
-# Source0-md5:	0c980ae53823305bd58e651cb5fd1a41
-Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-%{_rules_ver}.tar.gz
-# Source1-md5:	4e8d46d38d9da270749ab0f13797b7b0
+Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
+# Source0-md5:	89cdc22af9516cbafc359b452819947e
+Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-2_3.tar.gz
+# Source1-md5:	d8bace8bd5210d1fbf4eb5c7ac460d70
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -119,7 +116,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %prep
-%setup -q -a1 -n %{name}-%{version}%{_rc}
+%setup -q -a1
 %patch0 -p1
 %if "%{_libdir}" == "%{_prefix}/lib64"
 %patch1
@@ -210,8 +207,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,TODO,USAGE}
-%doc doc/*.pdf
+%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,RULES.todo,TODO,USAGE,WISHLIST,*.pdf}
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
