@@ -1,5 +1,7 @@
 Summary:	Network intrusion detection system
+Summary(es):	Lightweight intrusion detection sniffer
 Summary(pl):	System wykrywania intruzów w sieciach
+Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.1
 Release:	1
@@ -11,7 +13,7 @@ Group(es):	Red
 Group(pl):	Sieciowe
 Group(pt_BR):	Rede
 Source0:	http://snort.sourcefire.com/releases/%{name}-%{version}-RELEASE.tar.gz
-Source1:	http://snort.sourcefire.com/downloads/snortrules.tar.gz
+Source1:	http://snort.sourcefire.com/downloads/%{name}rules.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
@@ -44,6 +46,16 @@ Snort has a real- time alerting capability as well, incorporating
 alerting mechanisms for syslog, user specified files, a UNIX socket,
 or WinPopup messages to Windows clients using Samba's smbclient.
 
+%description -l es
+Snort is a libpcap-based packet sniffer/logger which can be used as a
+lightweight network intrusion detection system. It features rules
+based logging and can perform protocol analysis, content
+searching/matching and can be used to detect a variety of attacks and
+probes, such as buffer overflows, stealth port scans, CGI attacks, SMB
+probes, OS fingerprinting attempts, and much more. Snort has a
+real-time alerting capabilty, with alerts being sent to syslog, a
+separate "alert" file, or as a WinPopup message via Samba's smbclient
+
 %description -l pl
 Snort to bazuj±cy na open source NIDS (network intrusion detection
 systems) wykonuj±cy w czasie rzeczywistym analizê ruchu oraz logowanie
@@ -57,6 +69,16 @@ modu³ow± architektórê. Snort umo¿liwia alarmowanie w czasie
 rzeczywistym poprzez sysloga, osobny plik lub jako wiadomo¶æ WinPopup
 poprzez klienta Samby: smbclient.
 
+%description -l pt_BR
+Snort é um sniffer baseado em libpcap que pode ser usado como um
+pequeno sistema de detecção de intrusos. Tem como característica o
+registro de pacotes baseado em regras e também pode executar uma
+análise do protocolo, pesquisa de padrões e detectar uma variedade de
+assinaturas de ataques, como estouros de buffer, varreduras "stealth"
+de portas, ataques CGI, pesquisas SMB, tentativas de descobrir o
+sistema operacional e muito mais. Possui um sistema de alerta em tempo
+real, com alertas enviados para o syslog, um arquivo de alertas em
+separado ou como uma mensagem Winpopup.
 
 %prep
 %setup -q -n %{name}-%{version}-RELEASE -a1
