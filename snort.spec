@@ -9,7 +9,7 @@ Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
-nName:		snort
+Name:		snort
 Version:	1.8.6
 Release:	3
 License:	GPL
