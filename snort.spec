@@ -17,7 +17,7 @@ Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
 # Source0-md5:	ab5bdd0cab96fe521d11d2c6d804518f
 Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
-# Source1-md5:	864eedb3122a1fe89c85669cc7d287e9
+# Source1-md5:	3ae3237bbb3a87ad1b452847a0c8f154
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
