@@ -27,7 +27,7 @@ Patch1:		%{name}-lib64.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libnet1-devel
+BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
@@ -43,6 +43,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires:	libnet1 = 1.0.2a
 %{?with_mysql:Provides:	snort(mysql) = %{version}}
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
