@@ -1,8 +1,9 @@
+#
 # Conditional build:
-%bcond_without	pgsql # build without PostgreSQL support
-%bcond_without	mysql # build without MySQL support
-%bcond_without	snmp  # without SNMP support
-
+%bcond_without	pgsql # build without PostgreSQL storage support
+%bcond_without	mysql # build without MySQL storage support
+%bcond_without	snmp  # build without SNMP support
+#
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
@@ -190,8 +191,9 @@ fi
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
-%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(750,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) /etc/logrotate.d/*
