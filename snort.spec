@@ -1,3 +1,5 @@
+# _without_pgsql - build without PostgreSQL support
+# _with_mysql	- build MySQL support
 Summary:	Network intrusion detection system
 Summary(es):	Lightweight intrusion detection sniffer
 Summary(pl):	System wykrywania intruzów w sieciach
@@ -19,7 +21,8 @@ Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
-BuildRequires:	mysql-devel
+%{?_with_mysql:BuildRequires:	mysql-devel}
+%{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6a
 BuildRequires:	ucd-snmp-devel
 BuildRequires:	sed
@@ -91,7 +94,8 @@ autoconf
 	--enable-flexresp \
 	--with-snmp \
 	--without-odbc \
-	--without-postgresql
+	--with%{?_without_pgsql:out}-postgresql \
+	--with%{!?_with_mysql:out}-mysql
 
 %{__make}
 
