@@ -10,7 +10,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.1
-Release:	1
+Release:	3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -186,13 +186,13 @@ fi
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
 %doc contrib/create* doc/*.pdf
-%attr(755,root,root)  %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(640,root,snort) %{_sysconfdir}/rules/*
-%attr(754,root,root)  /etc/rc.d/init.d/%{name}
-%attr(640,root,root)  /etc/logrotate.d/*
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) /etc/logrotate.d/*
 %{_mandir}/man?/*
