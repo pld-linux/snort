@@ -114,6 +114,8 @@ rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
+# we don't need libnsl, so don't use it
+no_libnsl=yes; export no_libnsl
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
