@@ -140,6 +140,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
+install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
@@ -191,6 +192,7 @@ fi
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/unicode.map
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
