@@ -8,8 +8,8 @@ Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
-Version:	1.8.1
-Release:	7
+Version:	1.8.3
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -17,8 +17,8 @@ Group(de):	Netzwerkwesen
 Group(es):	Red
 Group(pl):	Sieciowe
 Group(pt_BR):	Rede
-Source0:	http://snort.sourcefire.com/releases/%{name}-%{version}-RELEASE.tar.gz
-Source1:	http://snort.sourcefire.com/downloads/%{name}rules.tar.gz
+Source0:	http://www.snort.org/releases/%{name}-%{version}.tar.gz
+Source1:	http://www.snort.org/downloads/%{name}rules.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
@@ -80,7 +80,7 @@ real, com alertas enviados para o syslog, um arquivo de alertas em
 separado ou como uma mensagem Winpopup.
 
 %prep
-%setup -q -n %{name}-%{version}-RELEASE -a1
+%setup -q -a1
 
 %build
 rm -f missing
