@@ -10,7 +10,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.1
-Release:	3
+Release:	4
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -29,7 +29,7 @@ BuildRequires:	libnet1-devel
 BuildRequires:	libpcap-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
-BuildRequires:	openssl-devel >= 0.9.7b
+BuildRequires:	openssl-devel >= 0.9.7c
 %{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	zlib-devel
 PreReq:		rc-scripts >= 0.2.0
