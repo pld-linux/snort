@@ -2,7 +2,7 @@ Summary:	packet-sniffer/logger
 Summary(pl):	Sniffer oraz logger pakietów sieciowych
 Name:		snort
 Version:	1.7
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@clark.net>
 Group:		Networking
