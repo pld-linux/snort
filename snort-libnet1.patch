@@ -23,7 +23,7 @@ diff -Nur snort-2.0.0.org/src/detection-plugins/sp_respond.c snort-2.0.0/src/det
  #include "decode.h"
  #include "rules.h"
 --- snort-2.0.1/configure.in.orig	2003-08-07 12:28:49.000000000 +0200
-+++ snort-2.0.1/configure.in	2003-08-07 12:53:49.000000000 +0200
++++ snort-2.0.1/configure.in	2003-08-10 21:25:51.000000000 +0200
 @@ -598,26 +598,25 @@
  
  AC_ARG_ENABLE(flexresp,
@@ -71,7 +71,8 @@ diff -Nur snort-2.0.0.org/src/detection-plugins/sp_respond.c snort-2.0.0/src/det
 +    libnet_dir=`libnet1-config --cflags | cut -dI -f2`
    fi
  
-   LIBNET_INC_DIR=""
+-  LIBNET_INC_DIR=""
++  LIBNET_INC_DIR="/usr/include/libnet1"
    for i in $libnet_dir; do
 -    if test -r $i/libnet.h; then
 +    if test -r $i/libnet1.h; then
@@ -99,7 +100,7 @@ diff -Nur snort-2.0.0.org/src/detection-plugins/sp_respond.c snort-2.0.0/src/det
  
    LNET=""
 -  AC_CHECK_LIB(net, libnet_build_ip,, LNET="no")
-+  AC_CHECK_LIB(net1, libnet1_build_ip,, LNET="no")
++  AC_CHECK_LIB(net1, libnet_build_ip,, LNET="no")
    if test "$LNET" = "no"; then
      echo
      echo "   ERROR!  Libnet library not found, go get it from"
