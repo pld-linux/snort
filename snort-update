@@ -1,0 +1,120 @@
+#!/bin/bash
+#
+# Script inspired by snort mailing list discussion of managing
+# snort log files.  Uses Red Hat Linux startup script
+# /usr/rc.d/init.d/snortd.
+#
+# Place somewhere (e.g., /root) and run via cron like this:
+#   0 0 * * * root /etc/snort/check-snort
+
+# This script depends on you having "wget" installed.
+
+VERBOSE=1
+if [ "$1" !=  "-q" ]
+then
+	VERBOSE=
+fi
+
+PATH=/usr/bin:/bin
+MODE=640				# What permissions should be set
+					# on log files?
+NOTIFY="root"				# Who should the logs get mailed to?
+SNORTLOG=/var/log/snort			# Where are the snort logs?
+VISIONRULES=/etc/snort/vision.rules	# Where are the sub-rules?
+					# (included by rules.base).
+ARCHIVE=$SNORTLOG/archive		# If you don't want to place old
+					# logs in an archive, make this null.
+DATE=`date --date=yesterday +%Y.%m.%d`	# Yesterday's date.
+NOW=`date`				# Duh.
+
+WGET=`which wget`
+if [ -z "$WGET" ]
+then
+	echo ""
+	echo "This script relies on wget and the ability to connect"
+	echo "to http://dev.whitehats.com from this host."
+	echo "Please install wget and re-run."
+	echo ""
+	exit 0
+fi
+
+cd $SNORTLOG
+
+# Rotate and mail copies of log files (the "right" way)
+if [ -s snort.alert ]; then
+	ln snort.alert snort.alert.$DATE
+	rm snort.alert
+	touch snort.alert
+	chmod $MODE snort.alert
+	(echo "To: $NOTIFY"; \
+	 echo "Subject: SNORT: snort.alert.$DATE"; \
+	 echo "Date: $NOW"; \
+	 echo ""; \
+	 cat snort.alert.$DATE) | /usr/lib/sendmail -t
+	if [ -d $ARCHIVE ]; then
+		mv snort.alert.$DATE $ARCHIVE
+	fi
+fi
+if [ -s portscan.log ]; then
+	ln portscan.log portscan.log.$DATE
+	rm portscan.log
+	touch portscan.log
+	chmod $MODE portscan.log
+	(echo "To: $NOTIFY"; \
+	 echo "Subject: SNORT: portscan.log.$DATE"; \
+	 echo "Date: $NOW"; \
+	 echo ""; \
+	 cat portscan.log.$DATE) | /usr/lib/sendmail -t
+	if [ -d $ARCHIVE ]; then
+		mv portscan.log.$DATE $ARCHIVE
+	fi
+fi
+
+# Restart snort (doing it with stop/start restarts the snort-NNNN@NNNN.log
+# file).
+if [ ! $VERBOSE ]
+then
+	/etc/rc.d/init.d/snortd stop
+	/etc/rc.d/init.d/snortd start
+else
+	/etc/rc.d/init.d/snortd stop >/dev/null
+	/etc/rc.d/init.d/snortd start >/dev/null
+fi
+
+
+# If we are archiving stuff, copy the second to last snort-NNNN@NNNN.log
+# file into the archive directory (leaving the current one and any older
+# ones there - this takes the one that goes with the portscan.log and
+# snort.alert files we just archived.)
+
+if [ -d $ARCHIVE ]; then
+	LASTLOG=`ls -1 snort-[0-9]*@[0-9]*.log 2>/dev/null | sort -r |\
+		 head -2 | tail -1`
+	THISLOG=`ls -1 snort-[0-9]*@[0-9]*.log 2>/dev/null | sort -r |\
+		 head -1`
+	if [ "x$LASTLOG" != "x" -a "x$THISLOG" != "x$LASTLOG" ]; then
+		mv $LASTLOG $ARCHIVE
+		chmod $MODE $ARCHIVE/$LASTLOG
+	fi
+fi
+
+# Check for new rules from whitehats.com and notify root of differences.
+wget -q --output-document=${VISIONRULES}.new \
+	http://dev.whitehats.com/ids/vision.rules
+
+chmod $MODE ${VISIONRULES}.new
+diff -q $VISIONRULES ${VISIONRULES}.new >/dev/null
+if [ $? -eq 1 ]; then
+	(echo "To: $NOTIFY"; \
+	 echo "Subject: SNORT: Available changes to $VISIONRULES"; \
+	 echo "Date: $NOW"; \
+	 echo ""; \
+	 echo "diff $VISIONRULES ${VISIONRULES}.new"; \
+	 echo ""; \
+	 diff $VISIONRULES ${VISIONRULES}.new; \
+	 echo ""; \
+	 echo "To update the rules, do:"; \
+	 echo "    # mv ${VISIONRULES}.new $VISIONRULES") | /usr/lib/sendmail -t
+fi
+
+exit 0

@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# snortd         Start/Stop the snort IDS daemon.
+#
+# chkconfig: 2345 40 60
+# description:  snort is a lightweight network intrusion detection tool that
+#		currently detects more than 1100 host and network
+#		vulnerabilities, portscans, backdoors, and more.
+#
+# June 10, 2000 -- Dave Wreski <dave@linuxsecurity.com>
+#   - initial version
+#
+# July 08, 2000 Dave Wreski <dave@guardiandigital.com>
+#   - added snort user/group
+#   - support for 1.6.2
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Specify your network interface here
+INTERFACE=eth0
+
+# See how we were called.
+case "$1" in
+  start)
+	echo -n "Starting snort: "
+	daemon /usr/sbin/snort -u snort -g snort -s -d -D \
+		-i $INTERFACE -l /var/log/snort -c /etc/snort/rules.base
+	touch /var/lock/subsys/snort
+	echo
+	;;
+  stop)
+	echo -n "Stopping snort: "
+	killproc snort
+	rm -f /var/lock/subsys/snort
+	echo 
+	;;
+  restart)
+	$0 stop
+	$0 start
+	;;
+  status)
+	status snort
+	;;
+  *)
+	echo "Usage: $0 {start|stop|restart|status}"
+	exit 1
+esac
+
+exit 0

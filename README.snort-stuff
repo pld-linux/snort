@@ -1,0 +1,94 @@
+$Header$
+
+The following scripts were developed from ideas gleaned from the snort
+mailing list, with some stuff I came up with on my own.  It makes
+for a fairly easy to manage and simple snort configuration on a Red
+Hat Linux system.
+
+The basic files are included in the snort-stuff.tar file (which unpacks the
+files into the right places for each file, if untarred in the / directory.)
+This README file then resides in /usr/doc/snort-stuff (to go along with Red
+Hat's documentation directory structure.)  This is the net effect of
+what an RPM file would do, but I don't have time right now to go that
+far.  You can find the original at:
+
+	http://staff.washington.edu/dittrich/misc/snort-stuff.tar
+
+Right now, the basic files are:
+
+/usr/doc/snort-stuff/README.snort-stuff
+				This file.
+/etc/rc.d/init.d/snort		Red Hat Linux startup script for snort
+/usr/local/etc/check-snort	Daily checkup script (run by cron)
+/usr/local/etc/rules.base	Base rules file (needs to be modified
+				to suit your network.)
+
+INSTALLATION
+
+1).  Unpack the files.
+
+You can just unpack this tar file into /, like this:
+
+	# cd /
+	# tar -xvf /path/to/snort-stuff.tar
+	etc/rc.d/init.d/snort
+	usr/local/etc/check-snort
+	usr/local/etc/rules.base
+	usr/doc/snort-stuff/README
+
+2).  Create snort log and archive directories.
+
+The "snort" rc startup script and "check-snort" log file processor
+assume you are using the rules.base as defined here, and that you store
+snort log files in /var/log/snort and archive prior days' logs in
+/var/log/snort/archive.  Create these now if they don't already exist:
+
+	# mkdir -p /var/log/snort/archive
+	# chown -R root.wheel /var/log/snort
+	# chmod -R 640 /var/log/snort
+
+3).  Set up snort rules files.
+
+You now must edit /usr/local/etc/rules.base to set your own network
+addresses and list of DNS servers you want to ignore for portscan
+reports (if you want to do this).
+
+You next need to set up your rules, which in this case are just the rules
+set up as part of ArachNIDS by Max Vision.  You can get these with
+"wget" (if you don't have it, you might as well install it now from your
+favorite Red Hat archive site, as it is needed by the "check-snort" script.)
+
+	# wget --output-document=/usr/local/etc/vision.rules \
+	  http://dev.whitehats.com/ids/vision.rules
+
+4).  Set up daily checkup script.
+
+From the root account, edit your crontab (with "crontab -e") and add
+the following line (or one adjusted to fit the time of day you wish
+to process snort logs):
+
+	0 0 * * *	sh /usr/local/etc/check-snort
+
+5).  Configure snort startup script and start snort running.
+
+You now must install the snort startup script in order for snort to
+be run at boot and stopped/started by check-snort.
+
+	# chkconfig --add snort
+
+You can now start snort using this rc file.
+
+	# /etc/rc.d/init.d/snort start
+
+Lastly, check to see that it started correctly.
+
+	# /etc/rc.d/init.d/snort status
+	snort (pid 10739) is running...
+
+You will now be mailed copies of alert and portscan files, and
+notified of changes to the vision.rules file when necessary.  (You
+will also get email from cron with the snort stop/start messages to
+confirm that things are working as expected.)
+
+If you have any suggestions for changes, send them to me at
+<dittrich@cac.washington.edu>.
