@@ -13,7 +13,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.0
-Release:	8
+Release:	9
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -26,10 +26,11 @@ Source1:	%{name}rules-stable-06.05.2003.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
+Patch0:		%{name}-libnet1.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libnet-devel
+BuildRequires:	libnet1-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
@@ -111,7 +112,8 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %prep
-%setup -q -a1 
+%setup -q -a1
+%patch0 -p1
 
 %build
 rm -f missing
