@@ -83,34 +83,21 @@ gzip -9nf AUTHORS BUGS ChangeLog CREDITS NEWS README* RULES* USAGE
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -z "`getgid %{name}`" ]; then
-	%{_sbindir}/groupadd -g 46 -r snort 2> /dev/null || true
-fi
-
-if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
-		-c "SNORT" snort 2> /dev/null || true
-fi
+GID=46; %groupadd
+UID=46; HOMEDIR=%{_var}/log/snort; COMMENT=SNORT; %useradd
 	
 %post
+%chkconfig_add
 if [ "$1" = "1" ] ; then
-	/sbin/chkconfig --add snort
 	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
 fi
 
 %preun
-if [ "$1" = "0" ] ; then
-	if [ -f /var/lock/subsys/snort ]; then
-		/etc/rc.d/init.d/snort stop 1>&2
-	fi
-	/sbin/chkconfig --del snort
-fi
+%chkconfig_del
 
 %postun
-if [ "$1" = "0" ] ; then
-	%{_sbindir}/userdel snort 2> /dev/null || true
-	%{_sbindir}/groupdel snort 2> /dev/null || true
-fi
+%userdel
+%groupdel
 
 %files
 %defattr(644,root,root,755)
