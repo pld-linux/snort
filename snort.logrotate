@@ -1,7 +1,7 @@
-/var/log/snort {
+/var/log/snort/alert {
+	create 640 snort snort
 	olddir /var/log/archiv/snort
 	postrotate
 		/bin/killall -HUP snort
 	endscript
 }
-
