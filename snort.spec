@@ -6,7 +6,7 @@ Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.1
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
