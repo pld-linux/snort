@@ -1,4 +1,3 @@
-#
 # Conditional build:
 # _without_pgsql	build without PostgreSQL support
 # _without_mysql	build without MySQL support
@@ -11,7 +10,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.1
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -21,7 +20,10 @@ Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 # Source1-md5:	b7f033340b8fec21a1dfd7f86badac54
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
+Source4:	%{name}.conf
 URL:		http://www.snort.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
@@ -29,14 +31,16 @@ BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.6j
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
-BuildRequires:	autoconf
-BuildRequires:	automake
 %{!?_without_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
-Prereq:		rc-scripts >= 0.2.0
-Prereq:		/sbin/chkconfig
-Prereq:		%{_sbindir}/useradd
-Prereq:		%{_sbindir}/groupadd
+PreReq:		rc-scripts >= 0.2.0
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -123,33 +127,40 @@ rm -f missing
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
-	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
+	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
-install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -z "`getgid %{name}`" ]; then
-	%{_sbindir}/groupadd -g 46 -r snort 2> /dev/null || true
+	/usr/sbin/groupadd -g 46 -r snort 2> /dev/null || true
 fi
 
 if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
+	/usr/sbin/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
 		-c "SNORT" snort 2> /dev/null || true
 fi
 
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
-	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
+	touch /var/log/%{name} && chown snort.snort %{_var}/log/%{name}
+fi
+if [ -f /var/lock/subsys/snort ]; then
+	/etc/rc.d/init.d/snort restart 1>&2
+else
+	echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
 fi
 
 %preun
@@ -162,19 +173,19 @@ fi
 
 %postun
 if [ "$1" = "0" ] ; then
-	%{_sbindir}/userdel snort 2> /dev/null || true
-	%{_sbindir}/groupdel snort 2> /dev/null || true
+	/usr/sbin/userdel snort 2> /dev/null || true
+	/usr/sbin/groupdel snort 2> /dev/null || true
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
 %doc contrib/create* doc/*.pdf
-%attr(755,root,root)  %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
-%attr(754,root,root)  /etc/rc.d/init.d/%{name}
-%attr(640,root,root)  /etc/logrotate.d/*
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(640,root,root) /etc/logrotate.d/*
 %{_mandir}/man?/*
