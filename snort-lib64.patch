@@ -1,0 +1,78 @@
+--- configure.in~	2004-01-26 16:25:45.706051805 +0100
++++ configure.in	2004-01-26 16:30:27.632921786 +0100
+@@ -382,7 +382,7 @@
+     fi
+   else
+ 
+-    for i in lib lib/mysql; do
++    for i in lib64 lib64/mysql; do
+       str="$MYSQL_DIR/$i/libmysqlclient.*"
+       for j in `echo $str`; do
+         if test -r $j; then
+@@ -395,7 +395,7 @@
+     if test -z "$MYSQL_LIB_DIR"; then
+       if test "$mysql_fail" != "no"; then
+         FAIL_MESSAGE("mysqlclient library", 
+-                     "$MYSQL_DIR/lib $MYSQL_DIR/lib/mysql")
++                     "$MYSQL_DIR/lib64 $MYSQL_DIR/lib64/mysql")
+       else
+         AC_MSG_RESULT(no)
+       fi
+@@ -449,10 +449,10 @@
+     fi
+   else
+ 
+-    str="$ODBC_DIR/lib/libodbc.*"
++    str="$ODBC_DIR/lib64/libodbc.*"
+     for j in `echo $str`; do
+       if test -r $j; then 
+-        ODBC_LIB_DIR="$ODBC_DIR/lib"
++        ODBC_LIB_DIR="$ODBC_DIR/lib64"
+         ODBC_LIB="odbc"
+       fi
+     done
+@@ -469,7 +469,7 @@
+ 
+     if test -z "$ODBC_LIB_DIR"; then
+       if test "$odbc_fail" != "no"; then
+-        FAIL_MESSAGE("odbc library (libodbc)", "$ODBC_DIR/lib")
++        FAIL_MESSAGE("odbc library (libodbc)", "$ODBC_DIR/lib64")
+       else
+         AC_MSG_RESULT(no)
+       fi
+@@ -526,7 +526,7 @@
+     fi
+   else
+ 
+-    for i in lib lib/pgsql; do
++    for i in lib64 lib64/pgsql; do
+       str="$POSTGRESQL_DIR/$i/libpq.*"
+       for j in `echo $str`; do
+         if test -r $j; then
+@@ -539,7 +539,7 @@
+     if test -z "$POSTGRESQL_LIB_DIR"; then
+       if test "$postgresql_fail" != "no"; then
+         FAIL_MESSAGE("postgresql library libpq",
+-        "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib/pgsql")
++        "$POSTGRESQL_DIR/lib64 $POSTGRESQL_DIR/lib64/pgsql")
+       else
+         AC_MSG_RESULT(no);
+       fi
+@@ -592,7 +592,7 @@
+     for i in rdbms/demo rdbms/public network/public; do
+       ORACLE_CPP_FLAGS="$ORACLE_CPP_FLAGS -I$ORACLE_DIR/$i"
+     done
+-    ORACLE_LIB_DIR="$ORACLE_DIR/lib"
++    ORACLE_LIB_DIR="$ORACLE_DIR/lib64"
+     AC_MSG_RESULT(yes)
+ 
+     LDFLAGS="${LDFLAGS} -L${ORACLE_LIB_DIR}"
+@@ -635,7 +635,7 @@
+     AC_MSG_WARN(libnet1-config --libs is broken on your system.  If you)
+     AC_MSG_WARN(are using a precompiled package please notify the) 
+     AC_MSG_WARN(maintainer.)
+-    LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
++    LDFLAGS="${LDFLAGS} -L/usr/local/lib64 -L/sw/lib64"
+     LIBS="${LIBS} -lnet"
+   fi
+ 
