@@ -13,7 +13,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.0
-Release:	7
+Release:	8
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -23,6 +23,7 @@ Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
 Source1:	%{name}rules-stable-06.05.2003.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
+Source4:	%{name}.conf
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -131,16 +132,18 @@ no_libnsl=yes; export no_libnsl
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
-	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
+	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
-install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
-install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -160,6 +163,12 @@ if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
 	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
 fi
+if [ -f /var/lock/subsys/snort ]; then
+        /etc/rc.d/init.d/snort restart 1>&2
+else
+        echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
+fi
+
 
 %preun
 if [ "$1" = "0" ] ; then
@@ -183,7 +192,9 @@ fi
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
+%attr(750,root,snort) %dir %{_sysconfdir}/rules
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+%attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(754,root,root)  /etc/rc.d/init.d/%{name}
 %attr(640,root,root)  /etc/logrotate.d/*
 %{_datadir}/mibs/site/*.txt
