@@ -1,38 +1,39 @@
 #
 # Conditional build:
 # _without_pgsql	build without PostgreSQL support
-# _with_mysql		build MySQL support
+# _without_mysql	build without MySQL support
 # _without_snmp		without SNMP support
 #
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
+Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
+Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	1.8.1
-Release:	3
+Version:	2.0.0
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Group(de):	Netzwerkwesen
-Group(es):	Red
-Group(pl):	Sieciowe
-Group(pt_BR):	Rede
-Source0:	http://snort.sourcefire.com/releases/%{name}-%{version}-RELEASE.tar.gz
-Source1:	http://snort.sourcefire.com/downloads/%{name}rules.tar.gz
+Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
+# snort rules from: Sat Oct 26 14:15:30 2002 GMT
+Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
-%{?_with_mysql:BuildRequires:	mysql-devel}
+%{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	openssl-devel >= 0.9.6a
-%{!?_without_snmp:BuildRequires:	ucd-snmp-devel}
+BuildRequires:	openssl-devel >= 0.9.6j
+%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
-%{?_with_mysql:Provides:	snort(mysql) = %{version}}
+BuildRequires:	automake
+%{!?_without_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
+Prereq:		/sbin/chkconfig
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -77,37 +78,60 @@ sistema operacional e muito mais. Possui um sistema de alerta em tempo
 real, com alertas enviados para o syslog, um arquivo de alertas em
 separado ou como uma mensagem Winpopup.
 
+%description -l ru
+Snort - это сниффер пакетов, который может использоваться как система
+обнаружения попыток вторжения в сеть. Snort поддерживает
+протоколирование пакетов на основе правил, может выполнять анализ
+протоколов, поиск в содержимом пакетов. Может также использоваться для
+обнаружения атак и "разведок", таких как попытки атак типа
+"переполнение буфера", скрытого сканирования портов, CGI атак, SMB
+разведок, попыток обнаружения типа ОС и много другого. Snort может
+информировать о событиях в реальном времени, посылая сообщения в
+syslog, отдельный файл или как WinPopup сообщения через smbclient.
+
+%description -l uk
+Snort - це сн╕фер пакет╕в, що може використовуватись як система
+виявлення спроб вторгнень в мережу. Snort п╕дтриму╓ протоколювання
+пакет╕в на основ╕ правил, може виконувати анал╕з протокол╕в, пошук у
+вм╕ст╕ пакет╕в. Може також використовуватись для виявлення атак та
+"розв╕док", таких як спроби атак типу "переповнення буфера",
+прихованого сканування порт╕в, CGI атак, SMB розв╕док, спроб виявлення
+типу ОС та багато ╕ншого. Snort може ╕нформувати про под╕╖ в реальному
+час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
+пов╕домлення через smbclient.
+
 %prep
-%setup -q -n %{name}-%{version}-RELEASE -a1
+%setup -q -a1 
 
 %build
-aclocal
-autoconf
+rm -f missing
+%{__aclocal}
+%{__autoconf}
+%{__automake}
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
 	--with%{?_without_snmp:out}-snmp \
 	--without-odbc \
 	--with%{?_without_pgsql:out}-postgresql \
-	--with%{!?_with_mysql:out}-mysql
+	--with%{?_without_mysql:out}-mysql
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d}
-install -d $RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}}
-install -d $RPM_BUILD_ROOT%{_datadir}/mibs/site
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
+	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
+	$RPM_BUILD_ROOT%{_datadir}/mibs/site
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install MIBS/*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
-install rules/*		$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-
-gzip -9nf AUTHORS BUGS ChangeLog CREDITS NEWS README* RULES* USAGE
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -121,7 +145,7 @@ if [ -z "`id -u %{name} 2>/dev/null`" ]; then
 	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
 		-c "SNORT" snort 2> /dev/null || true
 fi
-	
+
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
@@ -144,12 +168,13 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz contrib/create* *.pdf
+%doc doc/{AUTHORS,BUGS,CREDITS,FAQ,NEWS,README*,RULES*,TODO,USAGE}
+%doc contrib/create* doc/*.pdf
 %attr(755,root,root)  %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(754,root,root)  /etc/rc.d/init.d/%{name}
 %attr(640,root,root)  /etc/logrotate.d/*
 %{_datadir}/mibs/site/*.txt
