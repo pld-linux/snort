@@ -10,15 +10,15 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.0.1
-Release:	4
+Version:	2.0.5
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# Source0-md5:	ab5bdd0cab96fe521d11d2c6d804518f
-Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
-# Source1-md5:	5f1cadf45b6b6af0607043306893ad62
+# Source0-md5:	f129ee00a3d6e7b7c1ff4a1e1fba3a08
+Source1:	http://www.snort.org/dl/rules/%{name}rules-stable.tar.gz
+# Source1-md5:	1289317bcff4998df2e59c00b894eb82
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -112,13 +112,12 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 %patch0 -p1
 
 %build
-rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
 # we don't need libnsl, so don't use it
-no_libnsl=yes; export no_libnsl
 %configure \
+	no_libnsl=yes \
 	--enable-smbalerts \
 	--enable-flexresp \
 	--with-libnet-includes=/usr/include/libnet1 \
