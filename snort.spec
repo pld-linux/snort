@@ -19,6 +19,7 @@ Source0:	http://www.snort.org/releases/%{name}-%{version}.tar.gz
 Source1:	http://www.snort.org/downloads/%{name}rules.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
+Patch0:		%{name}-dup_AC_OUTPUT.patch
 URL:		http://www.snort.org/
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
@@ -101,6 +102,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 
 %prep
 %setup -q -a1
+%patch0 -p1
 
 %build
 rm -f missing
