@@ -1,5 +1,9 @@
-# _without_pgsql - build without PostgreSQL support
-# _with_mysql	- build MySQL support
+#
+# Conditional build:
+# _without_pgsql	build without PostgreSQL support
+# _with_mysql		build MySQL support
+# _without_snmp		without SNMP support
+#
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
@@ -23,9 +27,8 @@ BuildRequires:	libpcap-devel
 %{?_with_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6a
-BuildRequires:	ucd-snmp-devel
+%{!?_without_snmp:BuildRequires:	ucd-snmp-devel}
 BuildRequires:	zlib-devel
-BuildRequires:	sed
 BuildRequires:	autoconf
 %{?_with_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
@@ -84,7 +87,7 @@ autoconf
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
-	--with-snmp \
+	--with%{?_without_snmp:out}-snmp \
 	--without-odbc \
 	--with%{?_without_pgsql:out}-postgresql \
 	--with%{!?_with_mysql:out}-mysql
