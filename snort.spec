@@ -11,7 +11,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.0.0
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -25,7 +25,7 @@ BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	openssl-devel >= 0.9.6i
+BuildRequires:	openssl-devel >= 0.9.6j
 %{!?_without_snmp:BuildRequires:	net-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
@@ -127,7 +127,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install etc/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
 install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
