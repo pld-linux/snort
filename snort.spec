@@ -82,7 +82,7 @@ separado ou como uma mensagem Winpopup.
 rm -f missing
 aclocal
 autoconf
-automake -a -c
+automake -a -c -f
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
