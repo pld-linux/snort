@@ -31,8 +31,6 @@ BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.6k
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
-%{!?_without_mysql:Provides:	snort(mysql) = %{version}}
-%{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 PreReq:		rc-scripts >= 0.2.0
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
@@ -41,6 +39,8 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+%{!?_without_mysql:Provides:	snort(mysql) = %{version}}
+%{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -113,6 +113,8 @@ rm -f missing
 %{__aclocal}
 %{__autoconf}
 %{__automake}
+# we don't need libnsl, so don't use it
+no_libnsl=yes; export no_libnsl
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
@@ -189,6 +191,6 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
 %attr(640,root,snort) %{_sysconfdir}/rules/*
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%attr(750,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) /etc/logrotate.d/*
 %{_mandir}/man?/*
