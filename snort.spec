@@ -105,8 +105,8 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 %build
 rm -f missing
 aclocal
-autoconf
-automake -a -c -f
+%{__autoconf}
+%{__automake}
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
