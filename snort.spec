@@ -21,15 +21,16 @@ Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
-%{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6i
+%{!?_without_pgsql:BuildRequires:	postgresql-devel}
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
-BuildRequires:	autoconf
-BuildRequires:	automake
+Requires:	openssl >= 0.9.6i
 %{!?_without_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
