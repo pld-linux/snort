@@ -10,15 +10,13 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.0.0
-Release:	3
+Version:	2.0.1
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# snort rules from: Sat Oct 26 14:15:30 2002 GMT
-# http://www.snort.org/dl/signatures/snortrules-stable.tar.gz
-Source1:	%{name}rules-stable-26.10.2002.tar.gz
+Source1:	%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
@@ -128,7 +126,6 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install rules/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
 install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
@@ -178,5 +175,4 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*
 %attr(754,root,root)  /etc/rc.d/init.d/%{name}
 %attr(640,root,root)  /etc/logrotate.d/*
-%{_datadir}/mibs/site/*.txt
 %{_mandir}/man?/*
