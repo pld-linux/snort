@@ -10,27 +10,26 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	1.9.1
-Release:	2
+Version:	2.0.0
+Release:	1rc1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
+Source0:	http://www.snort.org/dl/%{name}-%{version}rc1.tar.gz
 # snort rules from: Sat Oct 26 14:15:30 2002 GMT
 Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
-BuildRequires:	autoconf
-BuildRequires:	automake
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
-BuildRequires:	openssl-devel >= 0.9.6i
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
-%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
+BuildRequires:	openssl-devel >= 0.9.6i
+%{!?_without_snmp:BuildRequires:	net-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
-Requires:	openssl >= 0.9.6i
+BuildRequires:	autoconf
+BuildRequires:	automake
 %{!?_without_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
@@ -102,7 +101,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %prep
-%setup -q -a1
+%setup -q -a1 -n %{name}-%{version}rc1
 
 %build
 rm -f missing
