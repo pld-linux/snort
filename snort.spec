@@ -1,8 +1,8 @@
 #
 # Conditional build:
-%bcond_without	pgsql # build without PostgreSQL storage support
-%bcond_without	mysql # build without MySQL storage support
-%bcond_without	snmp  # build without SNMP support
+%bcond_without	pgsql	# build without PostgreSQL storage support
+%bcond_without	mysql	# build without MySQL storage support
+%bcond_without	snmp	# build without SNMP support
 #
 %define		_rules_ver	2_2
 
@@ -183,9 +183,9 @@ if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
 fi
 if [ -f /var/lock/subsys/snort ]; then
-        /etc/rc.d/init.d/snort restart 1>&2
+	/etc/rc.d/init.d/snort restart 1>&2
 else
-        echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
+	echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
 fi
 
 
