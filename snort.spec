@@ -79,7 +79,7 @@ install %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
 install %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules.base
 install %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/vision.rules
 install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
-install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
+install %{SOURCE5}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
 
 gzip -9nf AUTHORS BUGS ChangeLog CREDITS NEWS README* RULES* USAGE
 
