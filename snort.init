@@ -10,6 +10,7 @@
 
 # Source function library.
 . /etc/rc.d/init.d/functions
+. /etc/sysconfig/network
 
 # Get service config - may override defaults
 [ -f /etc/sysconfig/snort ] && . /etc/sysconfig/snort
