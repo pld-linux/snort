@@ -1,8 +1,7 @@
-%define	plev	-patch2
 Summary:	packet-sniffer/logger
 Summary(pl):	Sniffer oraz logger pakietów sieciowych.
 Name:		snort
-Version:	1.6.3
+Version:	1.7
 Release:	1
 License:	GPL
 Group:		Networking
@@ -10,13 +9,12 @@ Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
 URL:		http://www.snort.org/
 Vendor:		Marty Roesch <roesch@clark.net>
-Source0:	http://www.snort.org/Files/%{name}-%{version}%{plev}.tar.gz
+Source0:	http://www.snort.org/Files/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}-rules.base
 Source3:	%{name}-vision.rules
 Source4:	%{name}-update
 Source5:	%{name}.logrotate
-Patch0:		%{name}-configure.patch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
@@ -49,8 +47,7 @@ umo¿liwia alarmowanie w czasie rzeczywistym poprzez sysloga, osobny
 plik lub jako wiadomo¶æ WinPopup poprzez klienta Samby: smbclient.
 
 %prep
-%setup -q -n %{name}-%{version}%{plev}
-%patch0 -p1
+%setup -q -n %{name}-%{version}
 
 %build
 autoconf
@@ -72,7 +69,7 @@ install -d $RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}}
 	install
 
 sed -e "s#include #include %{_sysconfdir}/%{name}/#g" \
-	< snort-lib >	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/%{name}-lib
+	< snort.conf >	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/snort.conf
 install *-lib		$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
 
 install %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
@@ -124,6 +121,7 @@ fi
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}/%{name}
 %attr(640,root,snort) %config %{_sysconfdir}/%{name}/*-lib
+%attr(640,root,snort) %config %{_sysconfdir}/%{name}/snort.conf
 %attr(640,root,snort) %config %{_sysconfdir}/%{name}/vision.rules
 %attr(640,root,snort) %config(noreplace) %{_sysconfdir}/snort/rules.base
 %attr(750,root,root)  %{_sysconfdir}/rc.d/init.d/%{name}
