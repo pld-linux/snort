@@ -121,7 +121,7 @@ if [ -z "`id -u %{name} 2>/dev/null`" ]; then
 	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
 		-c "SNORT" snort 2> /dev/null || true
 fi
-	
+
 %post
 if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
