@@ -1,31 +1,32 @@
 Summary:	packet-sniffer/logger
-Summary(pl):	Sniffer oraz logger pakietów sieciowych.
+Summary(pl):	Sniffer oraz logger pakietów sieciowych
 Name:		snort
 Version:	1.7
 Release:	1
 License:	GPL
+Vendor:		Marty Roesch <roesch@clark.net>
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(pl):	Sieciowe
-URL:		http://www.snort.org/
-Vendor:		Marty Roesch <roesch@clark.net>
 Source0:	http://www.snort.org/Files/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}-rules.base
 Source3:	%{name}-vision.rules
 Source4:	%{name}-update
 Source5:	%{name}.logrotate
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+URL:		http://www.snort.org/
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 BuildRequires:	mysql-devel
 BuildRequires:	sed
-BuildRequires:	automake
-BuildRequires:	autoconf
 Prereq:		rc-scripts >= 0.2.0
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
 Prereq:		/sbin/chkconfig
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_sysconfdir	/etc/snort
+%define		_bindir		%{_sbindir}
 
 %description
 Snort is a libpcap-based packet sniffer/logger which can be used as a
@@ -49,36 +50,31 @@ umo¿liwia alarmowanie w czasie rzeczywistym poprzez sysloga, osobny
 plik lub jako wiadomo¶æ WinPopup poprzez klienta Samby: smbclient.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
 
 %build
-autoconf
-automake
 %configure \
-	--sysconfdir=%{_sysconfdir}/snort \
-	--bindir=%{_sbindir} \
 	--enable-smbalerts \
 	--enable-flexresp
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/{rc.d/init.d,%{name},cron.daily,logrotate.d}
-install -d $RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}}
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
+	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}}
 
-%{__make} \
-	DESTDIR=$RPM_BUILD_ROOT \
-	install
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
+install *-lib		$RPM_BUILD_ROOT%{_sysconfdir}
+install %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/rules.base
+install %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/vision.rules
 sed -e "s#include #include %{_sysconfdir}/%{name}/#g" \
-	< snort.conf >	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/snort.conf
-install *-lib		$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/
+	< snort.conf >	$RPM_BUILD_ROOT%{_sysconfdir}/snort.conf
 
-install %{SOURCE1}	$RPM_BUILD_ROOT%{_sysconfdir}/rc.d/init.d/%{name}
-install %{SOURCE2}	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules.base
-install %{SOURCE3}	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/vision.rules
-install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}/cron.daily/%{name}
-install %{SOURCE5}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
+install %{SOURCE1}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE4}	$RPM_BUILD_ROOT/etc/cron.daily/%{name}
+install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
 gzip -9nf AUTHORS BUGS ChangeLog CREDITS NEWS README* RULES* USAGE
 
@@ -96,13 +92,13 @@ if [ -z "`id -u %{name} 2>/dev/null`" ]; then
 fi
 	
 %post
-if [ $1 = 1 ] ; then
+if [ "$1" = "1" ] ; then
 	/sbin/chkconfig --add snort
 	touch %{_var}/log/%{name} && chown snort.snort %{_var}/log/%{name}
 fi
 
 %preun
-if [ $1 = 0 ] ; then
+if [ "$1" = "0" ] ; then
 	if [ -f /var/lock/subsys/snort ]; then
 		/etc/rc.d/init.d/snort stop 1>&2
 	fi
@@ -110,7 +106,7 @@ if [ $1 = 0 ] ; then
 fi
 
 %postun
-if [ $1 = 0 ] ; then
+if [ "$1" = "0" ] ; then
 	%{_sbindir}/userdel snort 2> /dev/null || true
 	%{_sbindir}/groupdel snort 2> /dev/null || true
 fi
@@ -121,12 +117,12 @@ fi
 %attr(755,root,root)  %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
-%attr(750,root,snort) %dir %{_sysconfdir}/%{name}
-%attr(640,root,snort) %config %{_sysconfdir}/%{name}/*-lib
-%attr(640,root,snort) %config %{_sysconfdir}/%{name}/snort.conf
-%attr(640,root,snort) %config %{_sysconfdir}/%{name}/vision.rules
-%attr(640,root,snort) %config(noreplace) %{_sysconfdir}/snort/rules.base
-%attr(750,root,root)  %{_sysconfdir}/rc.d/init.d/%{name}
-%attr(750,root,root)  %{_sysconfdir}/cron.daily/*
-%attr(640,root,root)  %{_sysconfdir}/logrotate.d/*
+%attr(750,root,snort) %dir %{_sysconfdir}
+%attr(640,root,snort) %config %{_sysconfdir}/*-lib
+%attr(640,root,snort) %config %{_sysconfdir}/snort.conf
+%attr(640,root,snort) %config %{_sysconfdir}/vision.rules
+%attr(640,root,snort) %config(noreplace) %{_sysconfdir}/rules.base
+%attr(754,root,root)  /etc/rc.d/init.d/%{name}
+%attr(750,root,root)  /etc/cron.daily/*
+%attr(640,root,root)  /etc/logrotate.d/*
 %{_mandir}/man*/*
