@@ -9,9 +9,9 @@ Summary(pl):	System wykrywania intruzСw w sieciach
 Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
-Name:		snort
+nName:		snort
 Version:	1.8.6
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -25,7 +25,7 @@ BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	openssl-devel >= 0.9.6a
-%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.5}
+%{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
 BuildRequires:	automake
