@@ -217,5 +217,5 @@ fi
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
 %attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(750,root,root) /etc/rc.d/init.d/%{name}
-%attr(640,root,root) /etc/logrotate.d/*
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
