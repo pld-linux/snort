@@ -3,6 +3,7 @@
 %bcond_without	pgsql	# build without PostgreSQL storage support
 %bcond_without	mysql	# build without MySQL storage support
 %bcond_without	snmp	# build without SNMP support
+%bcond_with	inline	# build with inline support
 #
 %define		_rules_ver	CURRENT
 %define		_rc		RC1
@@ -14,7 +15,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.3.0
-Release:	0.%{_rc}.2
+Release:	0.%{_rc}.3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -39,6 +40,7 @@ BuildRequires:	pcre-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.159
 BuildRequires:	zlib-devel
+%{?with_inline:BuildRequires:	iptables-devel}
 PreReq:		rc-scripts >= 0.2.0
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
@@ -132,6 +134,8 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 	no_libnsl=yes \
 	--enable-smbalerts \
 	--enable-flexresp \
+	%{?with_inline:--enable-inline } \
+	%{?with_inline:--with-libipq-includes=/usr/include/libipq}  \
 	--with-libnet-includes=/usr/include/libnet1 \
 	--with%{!?with_snmp:out}-snmp \
 	--without-odbc \
