@@ -22,7 +22,7 @@ BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 BuildRequires:	mysql-devel
 BuildRequires:	sed
-Requires:	rc-scripts >= 0.2.0
+Prereq:		rc-scripts >= 0.2.0
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
 Prereq:		/sbin/chkconfig
