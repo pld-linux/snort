@@ -13,10 +13,6 @@ Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Group(de):	Netzwerkwesen
-Group(es):	Red
-Group(pl):	Sieciowe
-Group(pt_BR):	Rede
 Source0:	http://www.snort.org/releases/%{name}-%{version}.tar.gz
 Source1:	http://www.snort.org/downloads/%{name}rules.tar.gz
 Source2:	%{name}.init
