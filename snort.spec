@@ -18,7 +18,7 @@ License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# snort rules from: Fri Apr 25 19:16:14 2003 GMT
+# snort rules from: Sun May 4 18:15:36 2003 GMT
 # http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source1:	%{name}rules-stable-04.05.2003.tar.gz
 Source2:	%{name}.init
