@@ -30,6 +30,7 @@ BuildRequires:	openssl-devel >= 0.9.6a
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
+BuildRequires:	automake
 %{?_with_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
 Prereq:		rc-scripts >= 0.2.0
