@@ -1,3 +1,5 @@
+# TODO: fix /var/log/snort permissions
+#	(770 root.snort in %files, chowned to snort.snort in %post)
 #
 # Conditional build:
 # _without_pgsql	build without PostgreSQL support
@@ -21,21 +23,25 @@ Source1:	http://www.snort.org/dl/signatures/%{name}rules-stable.tar.gz
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 URL:		http://www.snort.org/
+BuildRequires:	autoconf
+BuildRequires:	automake
 BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
-%{!?_without_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	openssl-devel >= 0.9.7
 %{!?_without_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
+BuildRequires:	openssl-devel >= 0.9.7
+%{!?_without_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	zlib-devel
-BuildRequires:	autoconf
-BuildRequires:	automake
+PreReq:		rc-scripts >= 0.2.0
+Requires(pre):	/usr/bin/getgid
+Requires(pre):	/bin/id
+Requires(pre):	/usr/sbin/groupadd
+Requires(pre):	/usr/sbin/useradd
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/userdel
+Requires(postun):	/usr/sbin/groupdel
 %{!?_without_mysql:Provides:	snort(mysql) = %{version}}
 %{!?_without_pgsql:Provides:	snort(pgsql) = %{version}}
-Prereq:		rc-scripts >= 0.2.0
-Prereq:		/sbin/chkconfig
-Prereq:		%{_sbindir}/useradd
-Prereq:		%{_sbindir}/groupadd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -138,11 +144,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 if [ -z "`getgid %{name}`" ]; then
-	%{_sbindir}/groupadd -g 46 -r snort 2> /dev/null || true
+	/usr/sbin/groupadd -g 46 -r snort 2> /dev/null || true
 fi
 
 if [ -z "`id -u %{name} 2>/dev/null`" ]; then
-	%{_sbindir}/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
+	/usr/sbin/useradd -u 46 -g %{name} -M -r -d %{_var}/log/%{name} -s /bin/false \
 		-c "SNORT" snort 2> /dev/null || true
 fi
 
@@ -162,8 +168,8 @@ fi
 
 %postun
 if [ "$1" = "0" ] ; then
-	%{_sbindir}/userdel snort 2> /dev/null || true
-	%{_sbindir}/groupdel snort 2> /dev/null || true
+	/usr/sbin/userdel snort 2> /dev/null || true
+	/usr/sbin/groupdel snort 2> /dev/null || true
 fi
 
 %files
