@@ -20,6 +20,8 @@ BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 BuildRequires:	mysql-devel
 BuildRequires:	sed
+BuildRequires:	automake
+BuildRequires:	autoconf
 Prereq:		rc-scripts >= 0.2.0
 Prereq:		%{_sbindir}/useradd
 Prereq:		%{_sbindir}/groupadd
