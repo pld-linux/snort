@@ -61,10 +61,8 @@ case "$1" in
 	;;
   reload)
 	msg_reloading snort
-	busy
 	killproc snort -HUP
 	RETVAL=$?
-	[ $RETVAL -eq 0 ] && ok || died
 	;;
   restart)
 	$0 stop
