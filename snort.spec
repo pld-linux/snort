@@ -5,6 +5,7 @@
 %bcond_without	snmp	# build without SNMP support
 #
 %define		_rules_ver	2_2
+%define		_rc		RC1
 
 Summary:	Network intrusion detection system
 Summary(pl):	System wykrywania intruzСw w sieciach
@@ -12,15 +13,15 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.2.0
-Release:	2
+Version:	2.3.0
+Release:	0.%{_rc}.1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
-Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# Source0-md5:	6194278217e4e3f733b046256a31f0e6
+Source0:	http://www.snort.org/dl/%{name}-%{version}%{_rc}.tar.gz
+# Source0-md5:	c86ef4bd8f0e0eac102686a15f40ada8
 Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-%{_rules_ver}.tar.gz
-# Source1-md5:	9e224964c113cb007b4beac8f4c3b57c
+# Source1-md5:	2e9947fb4bb2dc8ccdb6dc1e92832efb
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
@@ -116,7 +117,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %prep
-%setup -q -a1
+%setup -q -a1 -n %{name}-%{version}%{_rc}
 %patch0 -p1
 %if "%{_libdir}" == "%{_prefix}/lib64"
 %patch1
