@@ -9,7 +9,7 @@ Summary(pl):	System wykrywania intruzów w sieciach
 Summary(pt_BR):	Ferramenta de detecção de intrusos
 Name:		snort
 Version:	1.8.1
-Release:	6
+Release:	7
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -83,8 +83,10 @@ separado ou como uma mensagem Winpopup.
 %setup -q -n %{name}-%{version}-RELEASE -a1
 
 %build
+rm -f missing
 aclocal
 autoconf
+automake -a -c
 %configure \
 	--enable-smbalerts \
 	--enable-flexresp \
@@ -97,9 +99,9 @@ autoconf
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d}
-install -d $RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}}
-install -d $RPM_BUILD_ROOT%{_datadir}/mibs/site
+install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
+	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
+	$RPM_BUILD_ROOT%{_datadir}/mibs/site
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
