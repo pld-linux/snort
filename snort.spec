@@ -127,8 +127,8 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install etc/*MIB*.txt	$RPM_BUILD_ROOT%{_datadir}/mibs/site
-install rules/*.{rules,config}	$RPM_BUILD_ROOT%{_sysconfdir}
+install etc/{snort.conf,*MIB*.txt}	$RPM_BUILD_ROOT%{_datadir}/mibs/site
+install rules/*.{rules,config}		$RPM_BUILD_ROOT%{_sysconfdir}
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 
