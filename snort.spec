@@ -25,7 +25,7 @@ BuildRequires:	libnet-devel
 BuildRequires:	libpcap-devel
 %{!?_without_mysql:BuildRequires:	mysql-devel}
 %{!?_without_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	openssl-devel >= 0.9.6g
+BuildRequires:	openssl-devel >= 0.9.7
 %{!?_without_snmp:BuildRequires:	ucd-snmp-devel >= 4.2.6}
 BuildRequires:	zlib-devel
 BuildRequires:	autoconf
