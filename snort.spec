@@ -12,7 +12,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.3.2
-Release:	0.1
+Release:	1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -71,7 +71,6 @@ or WinPopup messages to Windows clients using Samba's smbclient.
 
 Sourcefire VRT Certified Rules requires registration.
 https://www.snort.org/pub-bin/register.cgi
-
 
 %description -l pl
 Snort to bazuj╠cy na open source NIDS (network intrusion detection
