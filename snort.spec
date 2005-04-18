@@ -69,6 +69,10 @@ Snort has a real- time alerting capability as well, incorporating
 alerting mechanisms for syslog, user specified files, a UNIX socket,
 or WinPopup messages to Windows clients using Samba's smbclient.
 
+Sourcefire VRT Certified Rules requires registration.
+https://www.snort.org/pub-bin/register.cgi
+
+
 %description -l pl
 Snort to bazuj±cy na open source NIDS (network intrusion detection
 systems) wykonuj±cy w czasie rzeczywistym analizê ruchu oraz logowanie
@@ -81,6 +85,9 @@ przeanalizowaæ jak równie¿ silnika wykrywaj±cego, wykorzystuj±cego
 modu³ow± architekturê. Snort umo¿liwia alarmowanie w czasie
 rzeczywistym poprzez sysloga, osobny plik lub jako wiadomo¶æ WinPopup
 poprzez klienta Samby: smbclient.
+
+Regu³y certyfikowane poprzez Sourcefire wymagaj± rejestracji.
+https://www.snort.org/pub-bin/register.cgi
 
 %description -l pt_BR
 Snort é um sniffer baseado em libpcap que pode ser usado como um
