@@ -126,7 +126,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 %package rules
 Summary:        Snort rules
 Summary(pl):    ReguЁki snorta
-Group:          Applications
+Group:          Networking
 PreReq:		%{name} = %{version}-%{release}
 
 %description rules
