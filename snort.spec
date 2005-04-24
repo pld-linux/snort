@@ -1,5 +1,5 @@
 # 
-# TODO: - snort rules in separate packge
+# TODO: - snort rules - fix description 
 #
 # Conditional build:
 %bcond_without	pgsql	# build without PostgreSQL storage support
@@ -123,6 +123,18 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
 пов╕домлення через smbclient.
 
+%package rules
+Summary:        Snort rules
+Summary(pl):    ReguЁki snorta
+Group:          Applications
+PreReq:		%{name} = %{version}-%{release}
+
+%description rules
+Snort rules.
+
+%description rules -l pl
+ReguЁki snorta.
+
 %prep
 %setup -q -a1
 %patch0 -p1
@@ -197,6 +209,8 @@ if [ -f /var/lock/subsys/snort ]; then
 	/etc/rc.d/init.d/snort restart 1>&2
 else
 	echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
+	echo "To run snort you must download and install snort rules."
+	echo "poldek --install snort-rules or download from http://www.snort.org/"
 fi
 
 
@@ -225,7 +239,9 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
-%attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
+
+%files rules
+%attr(640,root,snort) %{_sysconfdir}/rules/*
