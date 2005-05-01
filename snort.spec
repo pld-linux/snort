@@ -37,7 +37,7 @@ BuildRequires:	libpcap-devel
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pcre-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	zlib-devel
 %{?with_inline:BuildRequires:	iptables-devel}
 PreReq:		rc-scripts >= 0.2.0
@@ -183,23 +183,8 @@ install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid snort`" ]; then
-	if [ "`/usr/bin/getgid snort`" != "46" ]; then
-		echo "Error: group snort doesn't have gid=46. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 46 -r snort 1>&2
-fi
-if [ -n "`/bin/id -u snort 2>/dev/null`" ]; then
-	if [ "`/bin/id -u snort`" != "46" ]; then
-		echo "Error: user snort doesn't have uid=46. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 46 -g snort -M -r -d %{_var}/log/snort \
-		-s /bin/false -c "SNORT" snort 1>&2
-fi
+%groupadd -g 46 -r snort
+%useradd -u 46 -g snort -M -r -d %{_var}/log/snort -s /bin/false -c "SNORT" snort
 
 %post
 if [ "$1" = "1" ] ; then
