@@ -1,5 +1,5 @@
-# 
-# TODO: - snort rules - fix description 
+#
+# TODO: - snort rules - fix description
 #
 # Conditional build:
 %bcond_without	pgsql	# build without PostgreSQL storage support
@@ -20,7 +20,7 @@ Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
 # Source0-md5:	06bf140893e7cb120aaa9372d10a0100
-Source1:	http://www.snort.org/dl/rules/snortrules-snapshot-2_3.tar.gz
+Source1:	http://www.snort.org/dl/rules/%{name}rules-snapshot-2_3.tar.gz
 # Source1-md5:	d8bace8bd5210d1fbf4eb5c7ac460d70
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
@@ -124,9 +124,9 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %package rules
-Summary:        Snort rules
-Summary(pl):    ReguЁki snorta
-Group:          Networking
+Summary:	Snort rules
+Summary(pl):	ReguЁki snorta
+Group:		Networking
 PreReq:		%{name} = %{version}-%{release}
 
 %description rules
@@ -152,8 +152,8 @@ ReguЁki snorta.
 	--enable-smbalerts \
 	--enable-flexresp \
 	%{?with_inline:--enable-inline } \
-	%{?with_inline:--with-libipq-includes=/usr/include/libipq}  \
-	--with-libnet-includes=/usr/include/libnet1 \
+	%{?with_inline:--with-libipq-includes=%{_includedir}/libipq}  \
+	--with-libnet-includes=%{_includedir}/libnet1 \
 	--with%{!?with_snmp:out}-snmp \
 	--without-odbc \
 	--enable-perfmonitor \
@@ -184,7 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %pre
 %groupadd -g 46 -r snort
-%useradd -u 46 -g snort -M -r -d %{_var}/log/snort -s /bin/false -c "SNORT" snort
+%useradd -u 46 -g snort -M -r -d %{_var}/log/snort -s /bin/false -c "SNORT IDS/IPS" snort
 
 %post
 if [ "$1" = "1" ] ; then
@@ -229,4 +229,5 @@ fi
 %{_mandir}/man?/*
 
 %files rules
+%defattr(644,root,root,755)
 %attr(640,root,snort) %{_sysconfdir}/rules/*
