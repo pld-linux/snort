@@ -13,15 +13,15 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.3.3
-Release:	1
+Version:	2.4.3
+Release:	0.1
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	06bf140893e7cb120aaa9372d10a0100
-Source1:	http://www.snort.org/dl/rules/%{name}rules-snapshot-2_3.tar.gz
-# Source1-md5:	d8bace8bd5210d1fbf4eb5c7ac460d70
+# Source0-md5:	5c3c8c69f2459bbe0c1f2057966c88a7
+Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
+# Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 Source2:	%{name}.init
 Source3:	%{name}.logrotate
 Source4:	%{name}.conf
