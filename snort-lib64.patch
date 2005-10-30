@@ -1,6 +1,7 @@
---- configure.in~	2004-01-26 16:25:45.706051805 +0100
-+++ configure.in	2004-01-26 16:30:27.632921786 +0100
-@@ -382,7 +382,7 @@
+diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
+--- snort-2.4.3.org/configure.in	2005-10-17 00:21:08.000000000 +0200
++++ snort-2.4.3/configure.in	2005-10-31 00:49:42.581788000 +0100
+@@ -408,7 +408,7 @@
      fi
    else
  
@@ -9,7 +10,7 @@
        str="$MYSQL_DIR/$i/libmysqlclient.*"
        for j in `echo $str`; do
          if test -r $j; then
-@@ -395,7 +395,7 @@
+@@ -421,7 +421,7 @@
      if test -z "$MYSQL_LIB_DIR"; then
        if test "$mysql_fail" != "no"; then
          FAIL_MESSAGE("mysqlclient library", 
@@ -18,7 +19,7 @@
        else
          AC_MSG_RESULT(no)
        fi
-@@ -449,10 +449,10 @@
+@@ -475,10 +475,10 @@
      fi
    else
  
@@ -31,7 +32,7 @@
          ODBC_LIB="odbc"
        fi
      done
-@@ -469,7 +469,7 @@
+@@ -495,7 +495,7 @@
  
      if test -z "$ODBC_LIB_DIR"; then
        if test "$odbc_fail" != "no"; then
@@ -40,25 +41,32 @@
        else
          AC_MSG_RESULT(no)
        fi
-@@ -526,7 +526,7 @@
-     fi
-   else
+@@ -578,7 +578,7 @@
  
--    for i in lib lib/pgsql; do
-+    for i in lib64 lib64/pgsql; do
-       str="$POSTGRESQL_DIR/$i/libpq.*"
-       for j in `echo $str`; do
-         if test -r $j; then
-@@ -539,7 +539,7 @@
-     if test -z "$POSTGRESQL_LIB_DIR"; then
-       if test "$postgresql_fail" != "no"; then
-         FAIL_MESSAGE("postgresql library libpq",
--        "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib/pgsql")
-+        "$POSTGRESQL_DIR/lib64 $POSTGRESQL_DIR/lib64/pgsql")
-       else
-         AC_MSG_RESULT(no);
-       fi
-@@ -592,7 +592,7 @@
+   if test -z "$POSTGRESQL_DIR"; then
+     for dir in $postgresql_directory; do
+-       for i in lib lib/pgsql; do
++       for i in lib64 lib64/pgsql; do
+          str="$dir/$i/libpq.*"
+          for j in `echo $str`; do
+            if test -r $j; then
+@@ -589,13 +589,13 @@
+        done
+    done
+   else
+-   POSTGRESQL_LIB_DIR="$POSTGRESQL_LIB_DIR/lib"
++   POSTGRESQL_LIB_DIR="$POSTGRESQL_LIB_DIR/lib64"
+   fi
+ 
+   if test -z "$POSTGRESQL_LIB_DIR"; then
+      if test "$postgresql_fail" != "no"; then
+        FAIL_MESSAGE("postgresql library libpq",
+-       "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib/pgsql")
++       "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib64/pgsql")
+      else
+        AC_MSG_RESULT(no);
+      fi
+@@ -647,7 +647,7 @@
      for i in rdbms/demo rdbms/public network/public; do
        ORACLE_CPP_FLAGS="$ORACLE_CPP_FLAGS -I$ORACLE_DIR/$i"
      done
@@ -67,12 +75,3 @@
      AC_MSG_RESULT(yes)
  
      LDFLAGS="${LDFLAGS} -L${ORACLE_LIB_DIR}"
-@@ -635,7 +635,7 @@
-     AC_MSG_WARN(libnet1-config --libs is broken on your system.  If you)
-     AC_MSG_WARN(are using a precompiled package please notify the) 
-     AC_MSG_WARN(maintainer.)
--    LDFLAGS="${LDFLAGS} -L/usr/local/lib -L/sw/lib"
-+    LDFLAGS="${LDFLAGS} -L/usr/local/lib64 -L/sw/lib64"
-     LIBS="${LIBS} -lnet"
-   fi
- 

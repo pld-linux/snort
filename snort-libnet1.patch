@@ -1,11 +1,14 @@
---- snort-2.3.0RC1/configure.in.orig	2004-11-18 17:13:42.000000000 +0000
-+++ snort-2.3.0RC1/configure.in	2004-11-19 10:10:22.398942856 +0000
-@@ -687,19 +687,19 @@
- 
-         LIBNET_INC_DIR=""
+diff -urNbB snort-2.4.3.org/configure.in snort-2.4.3/configure.in
+--- snort-2.4.3.org/configure.in	2005-10-17 00:21:08.000000000 +0200
++++ snort-2.4.3/configure.in	2005-10-31 00:46:20.301146250 +0100
+@@ -743,21 +743,21 @@
+         if test -n "$with_libnet_includes" -a "$with_libnet_includes" != "no"; then
+             libnet_dir="${with_libnet_includes}"
+          else
+-            libnet_dir="/usr/include /usr/local/include /sw/include"
++            libnet_dir="/usr/include /usr/local/include /sw/include /usr/include/libnet1"
+         fi
          AC_MSG_CHECKING("for libnet.h version 1.0.x")
--        libnet_dir="/usr/include /usr/local/include"
-+        libnet_dir="/usr/include /usr/local/include /usr/include/libnet1"
          for i in $libnet_dir; do
 -            if test -r $i/libnet.h; then
 +            if test -r $i/libnet1.h; then
@@ -16,17 +19,17 @@
          if test "$LIBNET_INC_DIR" != ""; then
 -            if eval "grep LIBNET_VERSION $LIBNET_INC_DIR/libnet.h | grep -v 1.0 >/dev/null"; then
 -                FAIL_MESSAGE("libnet 1.0.x (libnet.h)", $tmp)
-+            if eval "grep LIBNET_VERSION $LIBNET_INC_DIR/libnet1.h | grep -v 1.0.2a >/dev/null"; then
-+                FAIL_MESSAGE("libnet 1.0.x (libnet1.h)", $tmp)
++	    if eval "grep LIBNET_VERSION $LIBNET_INC_DIR/libnet1.h | grep -v 1.0.2a >/dev/null"; then
++		    FAIL_MESSAGE("libnet 1.0.x (libnet1.h)", $tmp)
              fi
 -            CFLAGS="${CFLAGS} `libnet-config --defines` `libnet-config --cflags`"
 -            LIBS="${LIBS} `libnet-config --libs`"
-+            CFLAGS="${CFLAGS} `libnet1-config --defines` `libnet1-config --cflags`"
-+            LIBS="${LIBS} `libnet1-config --libs`"
++	    CFLAGS="${CFLAGS} `libnet1-config --defines` `libnet1-config --cflags`"
++	    LIBS="${LIBS} `libnet1-config --libs`"
              CPPFLAGS="${CPPFLAGS} -I${LIBNET_INC_DIR}"
              AC_MSG_RESULT($i)
          else
-@@ -711,26 +711,25 @@
+@@ -769,26 +769,25 @@
  
  AC_ARG_ENABLE(flexresp,
  [  --enable-flexresp       Flexible Responses on hostile connection attempts],
@@ -59,7 +62,7 @@
    if test "$LNET" = "no"; then
      echo
      echo "   ERROR!  Libnet header not found, go get it from"
-@@ -743,38 +742,38 @@
+@@ -801,38 +800,38 @@
    AC_MSG_CHECKING(for libnet version 1.0.2a)
    if test "${LIBNET_CONFIG_BROKEN_CFLAGS}" = "yes"; then
      if test -n "$with_libnet_includes" -a "$with_libnet_includes" != "no"; then
@@ -106,8 +109,9 @@
    if test "$LNET" = "no"; then
      echo
      echo "   ERROR!  Libnet library not found, go get it from"
---- snort-2.3.0RC1/src/detection-plugins/sp_react.c.orig	2004-03-23 15:34:46.000000000 +0000
-+++ snort-2.3.0RC1/src/detection-plugins/sp_react.c	2004-11-19 10:14:10.595251744 +0000
+diff -urNbB snort-2.4.3.org/src/detection-plugins/sp_react.c snort-2.4.3/src/detection-plugins/sp_react.c
+--- snort-2.4.3.org/src/detection-plugins/sp_react.c	2004-03-23 16:34:46.000000000 +0100
++++ snort-2.4.3/src/detection-plugins/sp_react.c	2005-10-31 00:42:52.160138250 +0100
 @@ -57,7 +57,7 @@
  #include <stdlib.h>
  #include <string.h>
@@ -117,8 +121,9 @@
  
  #include "rules.h"
  #include "decode.h"
---- snort-2.3.0RC1/src/detection-plugins/sp_respond.c.orig	2004-11-19 10:17:02.159170064 +0000
-+++ snort-2.3.0RC1/src/detection-plugins/sp_respond.c	2004-11-19 10:17:10.138956952 +0000
+diff -urNbB snort-2.4.3.org/src/detection-plugins/sp_respond.c snort-2.4.3/src/detection-plugins/sp_respond.c
+--- snort-2.4.3.org/src/detection-plugins/sp_respond.c	2004-03-23 16:34:46.000000000 +0100
++++ snort-2.4.3/src/detection-plugins/sp_respond.c	2005-10-31 00:42:52.160138250 +0100
 @@ -34,7 +34,7 @@
  
  
@@ -128,8 +133,9 @@
  
  #include "decode.h"
  #include "rules.h"
---- snort-2.3.0RC1/src/inline.c~	2004-09-13 17:44:49.000000000 +0000
-+++ snort-2.3.0RC1/src/inline.c	2004-11-19 10:22:41.224624280 +0000
+diff -urNbB snort-2.4.3.org/src/inline.c snort-2.4.3/src/inline.c
+--- snort-2.4.3.org/src/inline.c	2005-05-05 22:00:35.000000000 +0200
++++ snort-2.4.3/src/inline.c	2005-10-31 00:42:52.160138250 +0100
 @@ -3,7 +3,7 @@
  #include <stdlib.h>
  #include <string.h>
