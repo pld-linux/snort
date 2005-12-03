@@ -14,7 +14,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.3
-Release:	1
+Release:	2
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -168,7 +168,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rules
+	$RPM_BUILD_ROOT%{_sysconfdir}/rules 
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -179,6 +179,9 @@ install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
+
+mv schemas/create_mysql schemas/create_mysql.sql
+mv schemas/create_postgresql schemas/create_postgresql.sql
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -217,6 +220,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,RULES.todo,TODO,USAGE,WISHLIST,*.pdf}
+%doc schemas/create_{mysql,postgresql}.sql
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
