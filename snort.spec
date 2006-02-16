@@ -154,7 +154,7 @@ Regu³ki snorta.
 	--enable-flexresp \
 	%{?with_inline:--enable-inline } \
 	%{?with_inline:--with-libipq-includes=%{_includedir}/libipq}  \
-	--with-libnet-includes=%{_includedir}/libnet1 \
+	--with-libnet-includes=%{_includedir} \
 	--with%{!?with_snmp:out}-snmp \
 	--without-odbc \
 	--enable-perfmonitor \
