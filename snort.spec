@@ -5,7 +5,8 @@
 %bcond_without	pgsql	# build without PostgreSQL storage support
 %bcond_without	mysql	# build without MySQL storage support
 %bcond_without	snmp	# build without SNMP support
-%bcond_with	inline	# build with inline support
+%bcond_without	inline	# build without inline support
+%bcond_without	prelude	# build without prelude support
 #
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
@@ -14,7 +15,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.3
-Release:	2
+Release:	3
 License:	GPL
 Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
@@ -32,7 +33,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
-BuildRequires:	libprelude-devel
+%{?with_prelude:BuildRequires:	libprelude-devel}
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -153,13 +154,14 @@ ReguЁki snorta.
 	--enable-smbalerts \
 	--enable-flexresp \
 	%{?with_inline:--enable-inline } \
-	%{?with_inline:--with-libipq-includes=%{_includedir}/libipq}  \
+	%{?with_inline:--with-libipq-includes=%{_includedir}/libipq }  \
 	--with-libnet-includes=%{_includedir} \
 	--with%{!?with_snmp:out}-snmp \
 	--without-odbc \
 	--enable-perfmonitor \
 	--with%{!?with_pgsql:out}-postgresql \
-	--with%{!?with_mysql:out}-mysql
+	--with%{!?with_mysql:out}-mysql \
+	%{?with_prelude:--enable-prelude }
 
 %{__make}
 
