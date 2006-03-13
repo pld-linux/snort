@@ -1,0 +1,3 @@
+- %userremove/%groupremove support
+- don't use %{name} macro in homedir
+- some standardization
