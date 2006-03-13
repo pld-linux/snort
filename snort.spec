@@ -17,7 +17,6 @@ Name:		snort
 Version:	2.4.3
 Release:	3
 License:	GPL v2
-Vendor:		Marty Roesch <roesch@sourcefire.com>
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
 # Source0-md5:	5c3c8c69f2459bbe0c1f2057966c88a7
@@ -31,6 +30,7 @@ Patch1:		%{name}-lib64.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{?with_inline:BuildRequires:	iptables-devel}
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
 %{?with_prelude:BuildRequires:	libprelude-devel}
@@ -41,16 +41,15 @@ BuildRequires:	pcre-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	zlib-devel
-%{?with_inline:BuildRequires:	iptables-devel}
-PreReq:		rc-scripts >= 0.2.0
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
 Requires:	libnet1 = 1.0.2a
+Requires:	rc-scripts >= 0.2.0
 Provides:	group(snort)
 %{?with_mysql:Provides:	snort(mysql) = %{version}}
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
@@ -129,7 +128,7 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 Summary:	Snort rules
 Summary(pl):	ReguЁki snorta
 Group:		Networking
-PreReq:		%{name} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description rules
 Snort rules.
@@ -170,7 +169,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rules 
+	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
