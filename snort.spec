@@ -40,6 +40,7 @@ BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pcre-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
@@ -192,23 +193,19 @@ rm -rf $RPM_BUILD_ROOT
 %useradd -u 46 -g snort -M -r -d %{_var}/log/snort -s /bin/false -c "SNORT IDS/IPS" snort
 
 %post
-if [ "$1" = "1" ] ; then
-	/sbin/chkconfig --add snort
-fi
-if [ -f /var/lock/subsys/snort ]; then
-	/etc/rc.d/init.d/snort restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/snort start\" to start Snort daemon."
-	echo "To run snort you must download and install snort rules."
-	echo "poldek --install snort-rules or download from http://www.snort.org/"
+/sbin/chkconfig --add snort
+%service snort restart
+if [ "$1" = 1 ]; then
+	%banner -e %{name} <<-EOF
+	To run snort you must download and install snort rules.
+	poldek -u snort-rules or download from http://www.snort.org/
+EOF
 fi
 
 
 %preun
 if [ "$1" = "0" ] ; then
-	if [ -f /var/lock/subsys/snort ]; then
-		/etc/rc.d/init.d/snort stop 1>&2
-	fi
+	%service snort stop
 	/sbin/chkconfig --del snort
 fi
 
