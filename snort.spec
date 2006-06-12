@@ -1,5 +1,8 @@
 #
 # TODO: - snort rules - fix description
+#	- clamav support - cleanup, add some docs
+#	- snort_inline - prepare separate sets of config-files, rules 
+#	  and startup script, adds some docs
 #
 # Conditional build:
 %bcond_without	pgsql	# build without PostgreSQL storage support
@@ -7,6 +10,7 @@
 %bcond_without	snmp	# build without SNMP support
 %bcond_without	inline	# build without inline support
 %bcond_without	prelude	# build without prelude support
+%bcond_without	clamav	# build w/o  ClamAV preprocessor support (anti-vir)
 #
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
@@ -15,7 +19,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.4
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
@@ -27,6 +31,8 @@ Source3:	%{name}.logrotate
 Source4:	%{name}.conf
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
+# http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
+Patch2:		%{name}-2.4.3-clamonly.diff
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -42,6 +48,7 @@ BuildRequires:	pcre-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
+%{?with_clamav:BuildRequires:	clamav-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -143,6 +150,7 @@ ReguЁki snorta.
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
+%{?with_clamav:%patch2 -p1 }
 
 %build
 %{__aclocal}
@@ -161,7 +169,8 @@ ReguЁki snorta.
 	--enable-perfmonitor \
 	--with%{!?with_pgsql:out}-postgresql \
 	--with%{!?with_mysql:out}-mysql \
-	%{?with_prelude:--enable-prelude }
+	%{?with_prelude:--enable-prelude } \
+	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav}
 
 %{__make}
 
