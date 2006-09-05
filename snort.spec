@@ -29,8 +29,8 @@ Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
-Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-CURRENT.tar.gz
-# NoSource2-md5:	aea4debd7bbb354905004a9730654655
+Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-2.4.tar.gz
+# NoSource2-md5:	79af87cda3321bd64279038f9352c1b3
 NoSource:	2
 %endif
 Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
