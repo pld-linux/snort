@@ -37,7 +37,6 @@ Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Communit
 # Source3-md5:	639d98ed81314723f4dee0b3100f7a19
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
-Source6:	%{name}.conf
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
@@ -141,18 +140,6 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
 пов╕домлення через smbclient.
 
-%package rules
-Summary:	Snort rules
-Summary(pl):	ReguЁki snorta
-Group:		Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description rules
-Snort rules.
-
-%description rules -l pl
-ReguЁki snorta.
-
 %prep
 %setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
 %patch0 -p1
@@ -160,6 +147,14 @@ ReguЁki snorta.
 %patch1 -p1
 %endif
 %{?with_clamav:%patch2 -p1}
+
+sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
+_DIR=$(pwd)
+cd rules
+for I in community-*.rules; do
+	echo "include \$RULE_PATH/$I" >> snort.conf
+done
+cd $_DIR
 
 %build
 %{__aclocal}
@@ -198,7 +193,8 @@ install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install %{SOURCE6}	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+
 
 mv schemas/create_mysql schemas/create_mysql.sql
 mv schemas/create_postgresql schemas/create_postgresql.sql
@@ -245,10 +241,7 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
+%attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
-
-%files rules
-%defattr(644,root,root,755)
-%attr(640,root,snort) %{_sysconfdir}/rules/*
