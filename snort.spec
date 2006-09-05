@@ -3,6 +3,7 @@
 #	- clamav support - cleanup, add some docs
 #	- snort_inline - prepare separate sets of config-files, rules 
 #	  and startup script, adds some docs
+#	- snort 2.6
 #
 # Conditional build:
 %bcond_without	pgsql	# build without PostgreSQL storage support
@@ -11,6 +12,7 @@
 %bcond_without	inline	# build without inline support
 %bcond_without	prelude	# build without prelude support
 %bcond_without	clamav	# build w/o  ClamAV preprocessor support (anti-vir)
+%bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
@@ -18,17 +20,24 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.4.4
-Release:	2
-License:	GPL v2
+Version:	2.4.5
+Release:	1
+License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	9dc9060d1f2e248663eceffadfc45e7e
+# Source0-md5:	108b3c20dcbaf3cdb17ea9203342eaaa
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
-Source2:	%{name}.init
-Source3:	%{name}.logrotate
-Source4:	%{name}.conf
+%if %{with registered}
+Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-CURRENT.tar.gz
+# NoSource2-md5:	aea4debd7bbb354905004a9730654655
+NoSource:	2
+%endif
+Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
+# Source3-md5:	639d98ed81314723f4dee0b3100f7a19
+Source4:	%{name}.init
+Source5:	%{name}.logrotate
+Source6:	%{name}.conf
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
@@ -145,12 +154,12 @@ Snort rules.
 ReguЁki snorta.
 
 %prep
-%setup -q -a1
+%setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
 %patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
-%{?with_clamav:%patch2 -p1 }
+%{?with_clamav:%patch2 -p1}
 
 %build
 %{__aclocal}
@@ -187,9 +196,9 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
-install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
+install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install %{SOURCE6}	$RPM_BUILD_ROOT%{_sysconfdir}
 
 mv schemas/create_mysql schemas/create_mysql.sql
 mv schemas/create_postgresql schemas/create_postgresql.sql
