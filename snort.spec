@@ -195,7 +195,6 @@ install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
 install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
 
-
 mv schemas/create_mysql schemas/create_mysql.sql
 mv schemas/create_postgresql schemas/create_postgresql.sql
 
@@ -209,8 +208,6 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add snort
 %service snort restart
-fi
-
 
 %preun
 if [ "$1" = "0" ] ; then
