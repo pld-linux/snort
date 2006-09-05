@@ -209,11 +209,6 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add snort
 %service snort restart
-if [ "$1" = 1 ]; then
-	%banner -e %{name} <<-EOF
-	To run snort you must download and install snort rules.
-	poldek -u snort-rules or download from http://www.snort.org/
-EOF
 fi
 
 
