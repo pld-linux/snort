@@ -1,5 +1,9 @@
 #
 # TODO: - snort rules - fix description
+#	- clamav support - cleanup, add some docs
+#	- snort_inline - prepare separate sets of config-files, rules
+#	  and startup script, adds some docs
+#	- snort 2.6
 #
 # Conditional build:
 %bcond_without	pgsql	# build without PostgreSQL storage support
@@ -7,6 +11,8 @@
 %bcond_without	snmp	# build without SNMP support
 %bcond_without	inline	# build without inline support
 %bcond_without	prelude	# build without prelude support
+%bcond_without	clamav	# build w/o  ClamAV preprocessor support (anti-vir)
+%bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
@@ -14,22 +20,31 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.4.4
-Release:	1
-License:	GPL v2
+Version:	2.4.5
+Release:	2
+License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	9dc9060d1f2e248663eceffadfc45e7e
+# Source0-md5:	108b3c20dcbaf3cdb17ea9203342eaaa
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
-Source2:	%{name}.init
-Source3:	%{name}.logrotate
-Source4:	%{name}.conf
+%if %{with registered}
+Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-2.4.tar.gz
+# NoSource2-md5:	79af87cda3321bd64279038f9352c1b3
+NoSource:	2
+%endif
+Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
+# Source3-md5:	639d98ed81314723f4dee0b3100f7a19
+Source4:	%{name}.init
+Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
+# http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
+Patch2:		%{name}-2.4.3-clamonly.diff
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{?with_clamav:BuildRequires:	clamav-devel}
 %{?with_inline:BuildRequires:	iptables-devel}
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
@@ -55,6 +70,7 @@ Provides:	group(snort)
 %{?with_mysql:Provides:	snort(mysql) = %{version}}
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 Provides:	user(snort)
+Obsoletes:	snort-rules
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
@@ -125,24 +141,21 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
 пов╕домлення через smbclient.
 
-%package rules
-Summary:	Snort rules
-Summary(pl):	ReguЁki snorta
-Group:		Networking
-Requires:	%{name} = %{version}-%{release}
-
-%description rules
-Snort rules.
-
-%description rules -l pl
-ReguЁki snorta.
-
 %prep
-%setup -q -a1
+%setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
 %patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
+%{?with_clamav:%patch2 -p1}
+
+sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
+_DIR=$(pwd)
+cd rules
+for I in community-*.rules; do
+	echo "include \$RULE_PATH/$I" >> snort.conf
+done
+cd $_DIR
 
 %build
 %{__aclocal}
@@ -161,7 +174,8 @@ ReguЁki snorta.
 	--enable-perfmonitor \
 	--with%{!?with_pgsql:out}-postgresql \
 	--with%{!?with_mysql:out}-mysql \
-	%{?with_prelude:--enable-prelude }
+	%{?with_prelude:--enable-prelude } \
+	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav}
 
 %{__make}
 
@@ -178,9 +192,9 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
-install %{SOURCE2}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE3}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install %{SOURCE4}	$RPM_BUILD_ROOT%{_sysconfdir}
+install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
+install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
 
 mv schemas/create_mysql schemas/create_mysql.sql
 mv schemas/create_postgresql schemas/create_postgresql.sql
@@ -195,13 +209,6 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add snort
 %service snort restart
-if [ "$1" = 1 ]; then
-	%banner -e %{name} <<-EOF
-	To run snort you must download and install snort rules.
-	poldek -u snort-rules or download from http://www.snort.org/
-EOF
-fi
-
 
 %preun
 if [ "$1" = "0" ] ; then
@@ -227,10 +234,7 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/rules
+%attr(640,root,snort) %{_sysconfdir}/rules/*
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
-
-%files rules
-%defattr(644,root,root,755)
-%attr(640,root,snort) %{_sysconfdir}/rules/*
