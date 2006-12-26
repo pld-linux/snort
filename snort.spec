@@ -1,7 +1,7 @@
 #
 # TODO: - snort rules - fix description
 #	- clamav support - cleanup, add some docs
-#	- snort_inline - prepare separate sets of config-files, rules 
+#	- snort_inline - prepare separate sets of config-files, rules
 #	  and startup script, adds some docs
 #	- snort 2.6
 #
@@ -21,7 +21,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.5
-Release:	1
+Release:	2
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
@@ -44,6 +44,7 @@ Patch2:		%{name}-2.4.3-clamonly.diff
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{?with_clamav:BuildRequires:	clamav-devel}
 %{?with_inline:BuildRequires:	iptables-devel}
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
@@ -56,7 +57,6 @@ BuildRequires:	pcre-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
-%{?with_clamav:BuildRequires:	clamav-devel}
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -70,6 +70,7 @@ Provides:	group(snort)
 %{?with_mysql:Provides:	snort(mysql) = %{version}}
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 Provides:	user(snort)
+Obsoletes:	snort-rules
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
