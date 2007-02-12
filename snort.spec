@@ -15,10 +15,10 @@
 %bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
-Summary(pl):	System wykrywania intruzСw w sieciach (IDS/IPS)
-Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
-Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
-Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
+Summary(pl.UTF-8):   System wykrywania intruzцЁw w sieciach (IDS/IPS)
+Summary(pt_BR.UTF-8):   Ferramenta de detecц╖цёo de intrusos
+Summary(ru.UTF-8):   Snort - я│п╦я│я┌п╣п╪п╟ п╬п╠п╫п╟я─я┐п╤п╣п╫п╦я▐ п©п╬п©я▀я┌п╬п╨ п╡я┌п╬я─п╤п╣п╫п╦я▐ п╡ я│п╣я┌я▄
+Summary(uk.UTF-8):   Snort - я│п╦я│я┌п╣п╪п╟ п╡п╦я▐п╡п╩п╣п╫п╫я▐ я│п©я─п╬п╠ п╡я┌п╬я─пЁп╫п╣п╫п╫я▐ п╡ п╪п╣я─п╣п╤я┐
 Name:		snort
 Version:	2.4.5
 Release:	2
@@ -92,54 +92,54 @@ or WinPopup messages to Windows clients using Samba's smbclient.
 Sourcefire VRT Certified Rules requires registration.
 https://www.snort.org/pub-bin/register.cgi
 
-%description -l pl
-Snort to bazuj╠cy na open source NIDS (network intrusion detection
-systems) wykonuj╠cy w czasie rzeczywistym analizЙ ruchu oraz logowanie
-pakietСw w sieciach IP. Jego mo©liwo╤ci to analiza protokoЁu oraz
-zawarto╤ci w poszukiwaniu rС©nego rodzaju atakСw lub prСb takich jak
-przepeЁnienia bufora, skanowanie portСw typu stealth, ataki CGI,
-prСbkowanie SMB, OS fingerprinting i du©o wiЙcej. Snort u©ywa
-elastycznego jЙzyka reguЁek do opisu ruchu, ktСry nale©y
-przeanalizowaФ jak rСwnie© silnika wykrywaj╠cego, wykorzystuj╠cego
-moduЁow╠ architekturЙ. Snort umo©liwia alarmowanie w czasie
-rzeczywistym poprzez sysloga, osobny plik lub jako wiadomo╤Ф WinPopup
+%description -l pl.UTF-8
+Snort to bazujд┘cy na open source NIDS (network intrusion detection
+systems) wykonujд┘cy w czasie rzeczywistym analizд≥ ruchu oraz logowanie
+pakietцЁw w sieciach IP. Jego moе╪liwoе⌡ci to analiza protokoе┌u oraz
+zawartoе⌡ci w poszukiwaniu rцЁе╪nego rodzaju atakцЁw lub prцЁb takich jak
+przepeе┌nienia bufora, skanowanie portцЁw typu stealth, ataki CGI,
+prцЁbkowanie SMB, OS fingerprinting i duе╪o wiд≥cej. Snort uе╪ywa
+elastycznego jд≥zyka reguе┌ek do opisu ruchu, ktцЁry naleе╪y
+przeanalizowaд┤ jak rцЁwnieе╪ silnika wykrywajд┘cego, wykorzystujд┘cego
+moduе┌owд┘ architekturд≥. Snort umoе╪liwia alarmowanie w czasie
+rzeczywistym poprzez sysloga, osobny plik lub jako wiadomoе⌡д┤ WinPopup
 poprzez klienta Samby: smbclient.
 
-ReguЁy certyfikowane poprzez Sourcefire wymagaj╠ rejestracji.
+Reguе┌y certyfikowane poprzez Sourcefire wymagajд┘ rejestracji.
 https://www.snort.org/pub-bin/register.cgi
 
-%description -l pt_BR
-Snort И um sniffer baseado em libpcap que pode ser usado como um
-pequeno sistema de detecГЦo de intrusos. Tem como caracterМstica o
-registro de pacotes baseado em regras e tambИm pode executar uma
-anАlise do protocolo, pesquisa de padrУes e detectar uma variedade de
+%description -l pt_BR.UTF-8
+Snort ц╘ um sniffer baseado em libpcap que pode ser usado como um
+pequeno sistema de detecц╖цёo de intrusos. Tem como caracterц╜stica o
+registro de pacotes baseado em regras e tambц╘m pode executar uma
+anц║lise do protocolo, pesquisa de padrц╣es e detectar uma variedade de
 assinaturas de ataques, como estouros de buffer, varreduras "stealth"
 de portas, ataques CGI, pesquisas SMB, tentativas de descobrir o
 sistema operacional e muito mais. Possui um sistema de alerta em tempo
 real, com alertas enviados para o syslog, um arquivo de alertas em
 separado ou como uma mensagem Winpopup.
 
-%description -l ru
-Snort - это сниффер пакетов, который может использоваться как система
-обнаружения попыток вторжения в сеть. Snort поддерживает
-протоколирование пакетов на основе правил, может выполнять анализ
-протоколов, поиск в содержимом пакетов. Может также использоваться для
-обнаружения атак и "разведок", таких как попытки атак типа
-"переполнение буфера", скрытого сканирования портов, CGI атак, SMB
-разведок, попыток обнаружения типа ОС и много другого. Snort может
-информировать о событиях в реальном времени, посылая сообщения в
-syslog, отдельный файл или как WinPopup сообщения через smbclient.
+%description -l ru.UTF-8
+Snort - я█я┌п╬ я│п╫п╦я└я└п╣я─ п©п╟п╨п╣я┌п╬п╡, п╨п╬я┌п╬я─я▀п╧ п╪п╬п╤п╣я┌ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ п╨п╟п╨ я│п╦я│я┌п╣п╪п╟
+п╬п╠п╫п╟я─я┐п╤п╣п╫п╦я▐ п©п╬п©я▀я┌п╬п╨ п╡я┌п╬я─п╤п╣п╫п╦я▐ п╡ я│п╣я┌я▄. Snort п©п╬п╢п╢п╣я─п╤п╦п╡п╟п╣я┌
+п©я─п╬я┌п╬п╨п╬п╩п╦я─п╬п╡п╟п╫п╦п╣ п©п╟п╨п╣я┌п╬п╡ п╫п╟ п╬я│п╫п╬п╡п╣ п©я─п╟п╡п╦п╩, п╪п╬п╤п╣я┌ п╡я▀п©п╬п╩п╫я▐я┌я▄ п╟п╫п╟п╩п╦п╥
+п©я─п╬я┌п╬п╨п╬п╩п╬п╡, п©п╬п╦я│п╨ п╡ я│п╬п╢п╣я─п╤п╦п╪п╬п╪ п©п╟п╨п╣я┌п╬п╡. п°п╬п╤п╣я┌ я┌п╟п╨п╤п╣ п╦я│п©п╬п╩я▄п╥п╬п╡п╟я┌я▄я│я▐ п╢п╩я▐
+п╬п╠п╫п╟я─я┐п╤п╣п╫п╦я▐ п╟я┌п╟п╨ п╦ "я─п╟п╥п╡п╣п╢п╬п╨", я┌п╟п╨п╦я┘ п╨п╟п╨ п©п╬п©я▀я┌п╨п╦ п╟я┌п╟п╨ я┌п╦п©п╟
+"п©п╣я─п╣п©п╬п╩п╫п╣п╫п╦п╣ п╠я┐я└п╣я─п╟", я│п╨я─я▀я┌п╬пЁп╬ я│п╨п╟п╫п╦я─п╬п╡п╟п╫п╦я▐ п©п╬я─я┌п╬п╡, CGI п╟я┌п╟п╨, SMB
+я─п╟п╥п╡п╣п╢п╬п╨, п©п╬п©я▀я┌п╬п╨ п╬п╠п╫п╟я─я┐п╤п╣п╫п╦я▐ я┌п╦п©п╟ п·п║ п╦ п╪п╫п╬пЁп╬ п╢я─я┐пЁп╬пЁп╬. Snort п╪п╬п╤п╣я┌
+п╦п╫я└п╬я─п╪п╦я─п╬п╡п╟я┌я▄ п╬ я│п╬п╠я▀я┌п╦я▐я┘ п╡ я─п╣п╟п╩я▄п╫п╬п╪ п╡я─п╣п╪п╣п╫п╦, п©п╬я│я▀п╩п╟я▐ я│п╬п╬п╠я┴п╣п╫п╦я▐ п╡
+syslog, п╬я┌п╢п╣п╩я▄п╫я▀п╧ я└п╟п╧п╩ п╦п╩п╦ п╨п╟п╨ WinPopup я│п╬п╬п╠я┴п╣п╫п╦я▐ я┤п╣я─п╣п╥ smbclient.
 
-%description -l uk
-Snort - це сн╕фер пакет╕в, що може використовуватись як система
-виявлення спроб вторгнень в мережу. Snort п╕дтриму╓ протоколювання
-пакет╕в на основ╕ правил, може виконувати анал╕з протокол╕в, пошук у
-вм╕ст╕ пакет╕в. Може також використовуватись для виявлення атак та
-"розв╕док", таких як спроби атак типу "переповнення буфера",
-прихованого сканування порт╕в, CGI атак, SMB розв╕док, спроб виявлення
-типу ОС та багато ╕ншого. Snort може ╕нформувати про под╕╖ в реальному
-час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
-пов╕домлення через smbclient.
+%description -l uk.UTF-8
+Snort - я├п╣ я│п╫я√я└п╣я─ п©п╟п╨п╣я┌я√п╡, я┴п╬ п╪п╬п╤п╣ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦я│я▄ я▐п╨ я│п╦я│я┌п╣п╪п╟
+п╡п╦я▐п╡п╩п╣п╫п╫я▐ я│п©я─п╬п╠ п╡я┌п╬я─пЁп╫п╣п╫я▄ п╡ п╪п╣я─п╣п╤я┐. Snort п©я√п╢я┌я─п╦п╪я┐я■ п©я─п╬я┌п╬п╨п╬п╩я▌п╡п╟п╫п╫я▐
+п©п╟п╨п╣я┌я√п╡ п╫п╟ п╬я│п╫п╬п╡я√ п©я─п╟п╡п╦п╩, п╪п╬п╤п╣ п╡п╦п╨п╬п╫я┐п╡п╟я┌п╦ п╟п╫п╟п╩я√п╥ п©я─п╬я┌п╬п╨п╬п╩я√п╡, п©п╬я┬я┐п╨ я┐
+п╡п╪я√я│я┌я√ п©п╟п╨п╣я┌я√п╡. п°п╬п╤п╣ я┌п╟п╨п╬п╤ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦я│я▄ п╢п╩я▐ п╡п╦я▐п╡п╩п╣п╫п╫я▐ п╟я┌п╟п╨ я┌п╟
+"я─п╬п╥п╡я√п╢п╬п╨", я┌п╟п╨п╦я┘ я▐п╨ я│п©я─п╬п╠п╦ п╟я┌п╟п╨ я┌п╦п©я┐ "п©п╣я─п╣п©п╬п╡п╫п╣п╫п╫я▐ п╠я┐я└п╣я─п╟",
+п©я─п╦я┘п╬п╡п╟п╫п╬пЁп╬ я│п╨п╟п╫я┐п╡п╟п╫п╫я▐ п©п╬я─я┌я√п╡, CGI п╟я┌п╟п╨, SMB я─п╬п╥п╡я√п╢п╬п╨, я│п©я─п╬п╠ п╡п╦я▐п╡п╩п╣п╫п╫я▐
+я┌п╦п©я┐ п·п║ я┌п╟ п╠п╟пЁп╟я┌п╬ я√п╫я┬п╬пЁп╬. Snort п╪п╬п╤п╣ я√п╫я└п╬я─п╪я┐п╡п╟я┌п╦ п©я─п╬ п©п╬п╢я√я≈ п╡ я─п╣п╟п╩я▄п╫п╬п╪я┐
+я┤п╟я│я√, п╫п╟п╢я│п╦п╩п╟я▌я┤п╦ п©п╬п╡я√п╢п╬п╪п╩п╣п╫п╫я▐ п╢п╬ syslog, п╬п╨я─п╣п╪п╬пЁп╬ я└п╟п╧п╩я┐ я┤п╦ я▐п╨ WinPopup
+п©п╬п╡я√п╢п╬п╪п╩п╣п╫п╫я▐ я┤п╣я─п╣п╥ smbclient.
 
 %prep
 %setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
