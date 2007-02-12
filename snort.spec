@@ -15,10 +15,10 @@
 %bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
-Summary(pl.UTF-8):   System wykrywania intruzów w sieciach (IDS/IPS)
-Summary(pt_BR.UTF-8):   Ferramenta de detecção de intrusos
-Summary(ru.UTF-8):   Snort - система обнаружения попыток вторжения в сеть
-Summary(uk.UTF-8):   Snort - система виявлення спроб вторгнення в мережу
+Summary(pl.UTF-8):	System wykrywania intruzów w sieciach (IDS/IPS)
+Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
+Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
+Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.5
 Release:	2
