@@ -13,7 +13,7 @@
 %bcond_without	snmp	# build without SNMP support
 %bcond_without	inline	# build without inline support
 %bcond_without	prelude	# build without prelude support
-%bcond_with	clamav	# build with ClamAV preprocessor support (anti-vir)
+%bcond_with	clamav	# ClamAV preprocessor support (anti-vir)
 %bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
@@ -22,27 +22,25 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.4.5
-Release:	3
+Version:	2.6.1.3
+Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	108b3c20dcbaf3cdb17ea9203342eaaa
-Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
-# Source1-md5:	35d9a2486f8c0280bb493aa03c011927
+# Source0-md5:	8b46997afd728fbdaafdc9b1d0278b07
+Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
+# Source1-md5:	c56da159884b511da44104a549f9af17
 %if %{with registered}
-Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-2.4.tar.gz
-# NoSource2-md5:	79af87cda3321bd64279038f9352c1b3
+Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/snortrules-snapshot-CURRENT.tar.gz
+# NoSource2-md5:	53e53da9cf7aa347fe1bcc4cdfb8eb38
 NoSource:	2
 %endif
-Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
-# Source3-md5:	639d98ed81314723f4dee0b3100f7a19
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
-Patch2:		%{name}-2.4.3-clamonly.diff
+Patch2:		%{name}-2.6.0.2-clamav.diff
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -144,20 +142,35 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 пов╕домлення через smbclient.
 
 %prep
-%setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
+%setup -q -a1 %{?with_registered:-a2}
 %patch0 -p1
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
 %{?with_clamav:%patch2 -p1}
 
-sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
-_DIR=$(pwd)
+# some snort.conf tweaks for out of the box expirience
+#
+
+sed -i "s!var\ RULE_PATH.*!var RULE_PATH /etc/snort/rules!g" etc/snort.conf
+
+%if !%{with registered}
+sed -i "s!^include $RULE_PATH!## include $RULE_PATH!g" etc/snort.conf
+%endif 
+
 cd rules
 for I in community-*.rules; do
-	echo "include \$RULE_PATH/$I" >> snort.conf
+	echo "include \$RULE_PATH/$I" >> ../etc/snort.conf
 done
-cd $_DIR
+cd -
+
+sed -i "s!^## include classification.config!include classification.config!g" etc/snort.conf
+sed -i "s!^## include reference.config!include reference.config!g" etc/snort.conf
+
+sed -i "s!/usr/local/lib/snort_!/usr/lib/snort_!g" etc/snort.conf
+
+#
+# end of snort.conf tweaks
 
 %build
 %{__aclocal}
@@ -186,20 +199,35 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rules
+	$RPM_BUILD_ROOT%{_sysconfdir}/rules \
+	$RPM_BUILD_ROOT/usr/lib/snort_dynamicengine \
+	$RPM_BUILD_ROOT/usr/lib/snort_dynamicpreprocessor \
+	$RPM_BUILD_ROOT/usr/src/snort_dynamicsrc
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
+install etc/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
 install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+install etc/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
 
-mv schemas/create_mysql schemas/create_mysql.sql
-mv schemas/create_postgresql schemas/create_postgresql.sql
+mv schemas/create_mysql{,.sql}
+mv schemas/create_postgresql{,.sql}
+
+cd $RPM_BUILD_ROOT/usr/lib/snort_dynamicengine
+ln -sf libsf_engine.so{.0.0.0,}
+
+cd $RPM_BUILD_ROOT/usr/lib/snort_dynamicpreprocessor
+ln -sf libsf_dcerpc_preproc.so{.0.0.0,}
+ln -sf libsf_dns_preproc.so{.0.0.0,}
+ln -sf libsf_ftptelnet_preproc.so{.0.0.0,}
+ln -sf libsf_ssh_preproc.so{.0.0.0,}
+ln -sf libsf_smtp_preproc.so{.0.0.0,}
+
+cd -
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -226,8 +254,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,RULES.todo,TODO,USAGE,WISHLIST,*.pdf}
-%doc schemas/create_{mysql,postgresql}.sql
+%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,TODO,USAGE,WISHLIST,*.pdf}
+%doc schemas/create_{mysql,postgresql,oracle}.sql
+%doc schemas/create_{db2,mssql}
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
 %attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
@@ -240,3 +269,10 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
+%attr(755,root,root) /usr/lib/snort_dynamicengine/libsf_engine.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dcerpc_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dns_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ftptelnet_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ssh_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_smtp_preproc.so*
+%attr(640,root,root) /usr/src/snort_dynamicsrc/*
