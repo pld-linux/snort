@@ -20,12 +20,12 @@ Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
 Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.4.5
-Release:	2
+Version:	2.6.1.3
+Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	108b3c20dcbaf3cdb17ea9203342eaaa
+# Source0-md5:	8b46997afd728fbdaafdc9b1d0278b07
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
@@ -34,13 +34,13 @@ Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules
 NoSource:	2
 %endif
 Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
-# Source3-md5:	639d98ed81314723f4dee0b3100f7a19
+# Source3-md5:	0328072d64553eff81ac52da4e0d947e
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
-Patch2:		%{name}-2.4.3-clamonly.diff
+#Patch2:		%{name}-2.6.0.2-clamav.diff
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -147,7 +147,7 @@ Snort - це сніфер пакетів, що може використовув
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
-%{?with_clamav:%patch2 -p1}
+#%{?with_clamav:%patch2 -p1}
 
 sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
 _DIR=$(pwd)
@@ -224,7 +224,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,RULES.todo,TODO,USAGE,WISHLIST,*.pdf}
+%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,TODO,USAGE,WISHLIST,*.pdf}
 %doc schemas/create_{mysql,postgresql}.sql
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
@@ -238,3 +238,11 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
+%dir /usr/lib/snort_dynamicengine
+%dir /usr/lib/snort_dynamicpreprocessor
+%attr(755,root,root) /usr/lib/snort_dynamicengine/libsf_engine.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dcerpc_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dns_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ftptelnet_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ssh_preproc.so*
+%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_smtp_preproc.so*
