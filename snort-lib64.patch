@@ -1,7 +1,6 @@
-diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
---- snort-2.4.3.org/configure.in	2005-10-17 00:21:08.000000000 +0200
-+++ snort-2.4.3/configure.in	2005-10-31 00:49:42.581788000 +0100
-@@ -408,7 +408,7 @@
+--- snort-2.6.1.3/configure.in.orig	2007-03-09 16:31:49.910623000 +0100
++++ snort-2.6.1.3/configure.in	2007-03-09 16:31:49.914623000 +0100
+@@ -429,7 +429,7 @@
      fi
    else
  
@@ -10,7 +9,7 @@ diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
        str="$MYSQL_DIR/$i/libmysqlclient.*"
        for j in `echo $str`; do
          if test -r $j; then
-@@ -421,7 +421,7 @@
+@@ -442,7 +442,7 @@
      if test -z "$MYSQL_LIB_DIR"; then
        if test "$mysql_fail" != "no"; then
          FAIL_MESSAGE("mysqlclient library", 
@@ -19,7 +18,7 @@ diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
        else
          AC_MSG_RESULT(no)
        fi
-@@ -475,10 +475,10 @@
+@@ -496,10 +496,10 @@
      fi
    else
  
@@ -32,7 +31,7 @@ diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
          ODBC_LIB="odbc"
        fi
      done
-@@ -495,7 +495,7 @@
+@@ -516,7 +516,7 @@
  
      if test -z "$ODBC_LIB_DIR"; then
        if test "$odbc_fail" != "no"; then
@@ -41,7 +40,7 @@ diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
        else
          AC_MSG_RESULT(no)
        fi
-@@ -578,7 +578,7 @@
+@@ -599,7 +599,7 @@
  
    if test -z "$POSTGRESQL_DIR"; then
      for dir in $postgresql_directory; do
@@ -50,23 +49,7 @@ diff -urBbN snort-2.4.3.org/configure.in snort-2.4.3/configure.in
           str="$dir/$i/libpq.*"
           for j in `echo $str`; do
             if test -r $j; then
-@@ -589,13 +589,13 @@
-        done
-    done
-   else
--   POSTGRESQL_LIB_DIR="$POSTGRESQL_LIB_DIR/lib"
-+   POSTGRESQL_LIB_DIR="$POSTGRESQL_LIB_DIR/lib64"
-   fi
- 
-   if test -z "$POSTGRESQL_LIB_DIR"; then
-      if test "$postgresql_fail" != "no"; then
-        FAIL_MESSAGE("postgresql library libpq",
--       "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib/pgsql")
-+       "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib64/pgsql")
-      else
-        AC_MSG_RESULT(no);
-      fi
-@@ -647,7 +647,7 @@
+@@ -676,7 +676,7 @@
      for i in rdbms/demo rdbms/public network/public; do
        ORACLE_CPP_FLAGS="$ORACLE_CPP_FLAGS -I$ORACLE_DIR/$i"
      done
