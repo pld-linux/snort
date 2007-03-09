@@ -1,6 +1,8 @@
 #
 # TODO: - snort rules - fix description
 #	- clamav support - cleanup, add some docs
+#	  update clamav patches - the current one uses obsolete cl_scanbuff 
+#	  function (should use cl_scanfile/cl_scandesc instead) 
 #	- snort_inline - prepare separate sets of config-files, rules
 #	  and startup script, adds some docs
 #	- snort 2.6
@@ -11,7 +13,7 @@
 %bcond_without	snmp	# build without SNMP support
 %bcond_without	inline	# build without inline support
 %bcond_without	prelude	# build without prelude support
-%bcond_without	clamav	# build w/o  ClamAV preprocessor support (anti-vir)
+%bcond_with	clamav	# build with ClamAV preprocessor support (anti-vir)
 %bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
@@ -21,7 +23,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.4.5
-Release:	2
+Release:	3
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
