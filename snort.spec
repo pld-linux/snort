@@ -23,7 +23,7 @@ Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.6.1.3
-Release:	1
+Release:	2
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
@@ -140,6 +140,13 @@ Snort - це сн╕фер пакет╕в, що може використовуватись як система
 типу ОС та багато ╕ншого. Snort може ╕нформувати про под╕╖ в реальному
 час╕, надсилаючи пов╕домлення до syslog, окремого файлу чи як WinPopup
 пов╕домлення через smbclient.
+
+%package devel
+Summary:	Snort devel files
+Group:		Networking
+
+%description devel
+Snort IDS/IPS devel files.
 
 %prep
 %setup -q -a1 %{?with_registered:-a2}
@@ -275,3 +282,7 @@ fi
 %attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ftptelnet_preproc.so*
 %attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ssh_preproc.so*
 %attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_smtp_preproc.so*
+
+%files devel
+%defattr(644,root,root,755)
+%attr(640,root,root) /usr/src/snort_dynamicsrc/*
