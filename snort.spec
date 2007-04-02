@@ -182,7 +182,7 @@ cd $_DIR
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
-	$RPM_BUILD_ROOT%{_var}/log/{%{name},archiv/%{name}} \
+	$RPM_BUILD_ROOT%{_var}/log/{%{name},archive/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
 	$RPM_BUILD_ROOT%{_sysconfdir}/rules
 
