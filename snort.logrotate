@@ -1,6 +1,6 @@
 /var/log/snort/alert {
 	create 640 snort snort
-	olddir /var/log/archiv/snort
+	olddir /var/log/archive/snort
 	postrotate
 		/bin/killall -HUP snort
 	endscript
