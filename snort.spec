@@ -228,7 +228,7 @@ fi
 %doc schemas/create_{mysql,postgresql}.sql
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/snort
-%attr(770,root,snort) %dir %{_var}/log/archiv/%{name}
+%attr(770,root,snort) %dir %{_var}/log/archive/%{name}
 %attr(750,root,snort) %dir %{_sysconfdir}
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/unicode.map
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
