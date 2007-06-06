@@ -22,14 +22,14 @@ Summary(pt_BR):	Ferramenta de detecГЦo de intrusos
 Summary(ru):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.6.1.3
-Release:	2
+Version:	2.6.1.5
+Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	8b46997afd728fbdaafdc9b1d0278b07
+# Source0-md5:	e52a7ea6ba9743a8f8ca397cd26fa1bf
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-CURRENT.tar.gz
-# Source1-md5:	c56da159884b511da44104a549f9af17
+# Source1-md5:	f236b8a4ac12e99d3e7bd81bf3b5a482
 %if %{with registered}
 Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/snortrules-snapshot-CURRENT.tar.gz
 # NoSource2-md5:	53e53da9cf7aa347fe1bcc4cdfb8eb38
@@ -41,6 +41,7 @@ Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
 Patch2:		%{name}-2.6.0.2-clamav.diff
+Patch3:		%{name}-pwd.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -155,6 +156,7 @@ Snort IDS/IPS devel files.
 %patch1 -p1
 %endif
 %{?with_clamav:%patch2 -p1}
+%patch3 -p1
 
 # some snort.conf tweaks for out of the box expirience
 #
@@ -199,7 +201,8 @@ sed -i "s!/usr/local/lib/snort_!/usr/lib/snort_!g" etc/snort.conf
 	%{?with_prelude:--enable-prelude } \
 	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav}
 
-%{__make}
+%{__make} \
+	PWD_HACK="$RPM_BUILD_ROOT/usr/lib/snort_dynamicengine"
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -212,7 +215,8 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT/usr/src/snort_dynamicsrc
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+	DESTDIR=$RPM_BUILD_ROOT \
+	PWD_HACK="$RPM_BUILD_ROOT/usr/lib/snort_dynamicengine"
 
 install etc/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
