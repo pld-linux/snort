@@ -1,0 +1,120 @@
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.am snort-2.6.1.3.a/src/dynamic-preprocessors/dcerpc/Makefile.am
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.am	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/dcerpc/Makefile.am	2007-03-20 15:45:48.000000000 +0100
+@@ -42,7 +42,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.in snort-2.6.1.3.a/src/dynamic-preprocessors/dcerpc/Makefile.in
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.in	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/dcerpc/Makefile.in	2007-03-20 15:45:48.000000000 +0100
+@@ -486,7 +486,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.am snort-2.6.1.3.a/src/dynamic-preprocessors/dns/Makefile.am
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.am	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/dns/Makefile.am	2007-03-20 15:45:48.000000000 +0100
+@@ -27,7 +27,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.in snort-2.6.1.3.a/src/dynamic-preprocessors/dns/Makefile.in
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.in	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/dns/Makefile.in	2007-03-20 15:45:48.000000000 +0100
+@@ -468,7 +468,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefile.am snort-2.6.1.3.a/src/dynamic-preprocessors/ftptelnet/Makefile.am
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefile.am	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/ftptelnet/Makefile.am	2007-03-20 15:45:48.000000000 +0100
+@@ -58,7 +58,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefile.in snort-2.6.1.3.a/src/dynamic-preprocessors/ftptelnet/Makefile.in
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefile.in	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/ftptelnet/Makefile.in	2007-03-20 15:45:48.000000000 +0100
+@@ -504,7 +504,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.am snort-2.6.1.3.a/src/dynamic-preprocessors/smtp/Makefile.am
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.am	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/smtp/Makefile.am	2007-03-20 15:45:48.000000000 +0100
+@@ -39,7 +39,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.in snort-2.6.1.3.a/src/dynamic-preprocessors/smtp/Makefile.in
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.in	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/smtp/Makefile.in	2007-03-20 15:45:48.000000000 +0100
+@@ -482,7 +482,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.am snort-2.6.1.3.a/src/dynamic-preprocessors/ssh/Makefile.am
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.am	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/ssh/Makefile.am	2007-03-20 15:45:48.000000000 +0100
+@@ -27,7 +27,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
+diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.in snort-2.6.1.3.a/src/dynamic-preprocessors/ssh/Makefile.in
+--- snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.in	2007-03-20 15:28:25.000000000 +0100
++++ snort-2.6.1.3.a/src/dynamic-preprocessors/ssh/Makefile.in	2007-03-20 15:45:48.000000000 +0100
+@@ -468,7 +468,7 @@ sf_dynamic_preproc_lib.c: ../include/sf_
+ 	cp $? $@
+ 
+ all-local:
+-	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
+ 
+ clean-local:
+ 	rm -f sf_dynamic_preproc_lib.c
