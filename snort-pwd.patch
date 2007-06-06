@@ -6,7 +6,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -18,7 +18,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dcerpc/Makefile.
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -30,7 +30,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.am 
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -42,7 +42,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/dns/Makefile.in 
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -54,7 +54,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefi
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -66,7 +66,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ftptelnet/Makefi
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -78,7 +78,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.am
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -90,7 +90,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/smtp/Makefile.in
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -102,7 +102,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.am 
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
@@ -114,7 +114,7 @@ diff -NurpP --minimal snort-2.6.1.3.b/src/dynamic-preprocessors/ssh/Makefile.in 
  
  all-local:
 -	$(MAKE) DESTDIR=$(PWD)/../build install-libLTLIBRARIES
-+	$(MAKE) DESTDIR=$(PWD_HACK)../build install-libLTLIBRARIES
++	$(MAKE) DESTDIR=$(PWD_HACK)/../build install-libLTLIBRARIES
  
  clean-local:
  	rm -f sf_dynamic_preproc_lib.c
