@@ -41,7 +41,6 @@ Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
 Patch2:		%{name}-2.6.0.2-clamav.diff
-Patch3:		%{name}-pwd.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -76,6 +75,9 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
 %define		_bindir		%{_sbindir}
+
+# 'make -jn' where n > 1 is broken for dynamic-preprocessors part of snort
+%define		__make		/usr/bin/make -j1
 
 %description
 Snort is an open source network intrusion detection system, capable of
@@ -156,7 +158,6 @@ Snort IDS/IPS devel files.
 %patch1 -p1
 %endif
 %{?with_clamav:%patch2 -p1}
-%patch3 -p1
 
 # some snort.conf tweaks for out of the box expirience
 #
@@ -201,8 +202,7 @@ sed -i "s!/usr/local/lib/snort_!/usr/lib/snort_!g" etc/snort.conf
 	%{?with_prelude:--enable-prelude } \
 	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav}
 
-%{__make} \
-	PWD_HACK="$RPM_BUILD_ROOT/usr/lib/snort_dynamicengine"
+%{__make} 
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -215,8 +215,7 @@ install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT/usr/src/snort_dynamicsrc
 
 %{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT \
-	PWD_HACK="$RPM_BUILD_ROOT/usr/lib/snort_dynamicengine"
+	DESTDIR=$RPM_BUILD_ROOT 
 
 install etc/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
 install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
