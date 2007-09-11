@@ -20,21 +20,21 @@ Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
 Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.6.1.3
+Version:	2.7.0.1
 Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	8b46997afd728fbdaafdc9b1d0278b07
+# Source0-md5:	06d3fa0b326dcdca59a19811f32b013a
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
-Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-2.4.tar.gz
-# NoSource2-md5:	79af87cda3321bd64279038f9352c1b3
+Source2:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_os/%{name}rules-snapshot-2.6.tar.gz
+# NoSource2-md5:	0405ec828cf9ad85a03cbf670818f690
 NoSource:	2
 %endif
 Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Community-Rules-2.4.tar.gz
-# Source3-md5:	0328072d64553eff81ac52da4e0d947e
+# Source3-md5:	f236b8a4ac12e99d3e7bd81bf3b5a482
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
