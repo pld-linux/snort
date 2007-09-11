@@ -71,7 +71,7 @@ Provides:	group(snort)
 %{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 Provides:	user(snort)
 Obsoletes:	snort-rules
-Conflicts:	logrotate < 3.7.4
+Conflicts:	logrotate < 3.7-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/snort
