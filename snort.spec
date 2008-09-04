@@ -20,12 +20,12 @@ Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
 Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.7.0.1
+Version:	2.8.2.2
 Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/current/%{name}-%{version}.tar.gz
-# Source0-md5:	06d3fa0b326dcdca59a19811f32b013a
+# Source0-md5:	091494809f0e83f98208d62e74cdfaa2
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
@@ -39,6 +39,7 @@ Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
+Patch2:		%{name}-open.patch
 # http://www.bleedingsnort.com/staticpages/index.php?page=snort-clamav
 #Patch2:		%{name}-2.6.0.2-clamav.diff
 URL:		http://www.snort.org/
@@ -149,6 +150,7 @@ Snort - це сніфер пакетів, що може використовув
 %patch1 -p1
 %endif
 #%{?with_clamav:%patch2 -p1}
+%patch2 -p1
 
 sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
 _DIR=$(pwd)
@@ -159,6 +161,7 @@ done
 cd $_DIR
 
 %build
+%{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__automake}
