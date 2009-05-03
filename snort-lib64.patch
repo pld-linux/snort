@@ -78,3 +78,123 @@
      AC_MSG_RESULT(yes)
  
      LDFLAGS="${LDFLAGS} -L${ORACLE_LIB_DIR}"
+diff -Nur snort-2.8.4.1-orig/src/dynamic-examples/dynamic-preprocessor/Makefile.am snort-2.8.4.1/src/dynamic-examples/dynamic-preprocessor/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-examples/dynamic-preprocessor/Makefile.am	2007-10-11 18:07:25.000000000 +0200
++++ snort-2.8.4.1/src/dynamic-examples/dynamic-preprocessor/Makefile.am	2009-05-03 20:26:49.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-noinst_libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++noinst_libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ noinst_lib_LTLIBRARIES = lib_sfdynamic_preprocessor_example.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-examples/dynamic-rule/Makefile.am snort-2.8.4.1/src/dynamic-examples/dynamic-rule/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-examples/dynamic-rule/Makefile.am	2007-10-11 18:07:25.000000000 +0200
++++ snort-2.8.4.1/src/dynamic-examples/dynamic-rule/Makefile.am	2009-05-03 20:26:42.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-noinst_libdir = ${exec_prefix}/lib/snort_dynamicrules
++noinst_libdir = ${exec_prefix}/lib64/snort_dynamicrules
+ 
+ noinst_lib_LTLIBRARIES = lib_sfdynamic_example_rule.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-plugins/sf_engine/Makefile.am snort-2.8.4.1/src/dynamic-plugins/sf_engine/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-plugins/sf_engine/Makefile.am	2008-10-06 18:33:00.000000000 +0200
++++ snort-2.8.4.1/src/dynamic-plugins/sf_engine/Makefile.am	2009-05-03 20:26:56.000000000 +0200
+@@ -5,7 +5,7 @@
+ 
+ lib_LTLIBRARIES = libsf_engine.la
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicengine
++libdir = ${exec_prefix}/lib64/snort_dynamicengine
+ 
+ libsf_engine_la_LDFLAGS = -export-dynamic
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/dcerpc/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/dcerpc/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/dcerpc/Makefile.am	2009-01-26 22:50:11.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/dcerpc/Makefile.am	2009-05-03 20:24:21.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_dcerpc_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/dcerpc2/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/dcerpc2/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/dcerpc2/Makefile.am	2009-01-26 22:50:13.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/dcerpc2/Makefile.am	2009-05-03 20:24:36.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include -I$(srcdir)/includes
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_dce2_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/dns/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/dns/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/dns/Makefile.am	2009-01-26 22:50:17.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/dns/Makefile.am	2009-05-03 20:24:46.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_dns_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/ftptelnet/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/ftptelnet/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/ftptelnet/Makefile.am	2009-01-26 22:50:18.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/ftptelnet/Makefile.am	2009-05-03 20:25:13.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include -I./includes
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_ftptelnet_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/smtp/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/smtp/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/smtp/Makefile.am	2009-01-26 22:50:22.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/smtp/Makefile.am	2009-05-03 20:25:35.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include -I${top_srcdir}/src/dynamic-preprocessors/libs
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_smtp_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/ssh/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/ssh/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/ssh/Makefile.am	2009-01-26 22:50:24.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/ssh/Makefile.am	2009-05-03 20:25:43.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_ssh_preproc.la
+ 
+diff -Nur snort-2.8.4.1-orig/src/dynamic-preprocessors/ssl/Makefile.am snort-2.8.4.1/src/dynamic-preprocessors/ssl/Makefile.am
+--- snort-2.8.4.1-orig/src/dynamic-preprocessors/ssl/Makefile.am	2009-01-26 22:50:24.000000000 +0100
++++ snort-2.8.4.1/src/dynamic-preprocessors/ssl/Makefile.am	2009-05-03 20:25:57.000000000 +0200
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include -I${top_srcdir}/src/dynamic-preprocessors/libs
+ 
+-libdir = ${exec_prefix}/lib/snort_dynamicpreprocessor
++libdir = ${exec_prefix}/lib64/snort_dynamicpreprocessor
+ 
+ lib_LTLIBRARIES = libsf_ssl_preproc.la
+ 
