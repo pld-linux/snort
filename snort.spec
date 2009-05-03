@@ -182,8 +182,7 @@ cd $_DIR
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_initrddir} \
-	$RPM_BUILD_ROOT%{_sysconfdir}/%{name} \
-	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.daily,logrotate.d} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/{%{name},cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archive/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
 	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules
@@ -236,9 +235,9 @@ fi
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.config
 %attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %attr(750,root,snort) %dir %{_sysconfdir}/%{name}/rules
-%attr(640,root,snort) %{_sysconfdir}/%{name}/rules/
+%attr(640,root,snort) %{_sysconfdir}/%{name}/rules/*
 %attr(754,root,root) %{_initrddir}/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/logrotate.d/*
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
 %{_mandir}/man?/*
 %dir %{_libdir}/snort_dynamicengine
 %dir %{_libdir}/snort_dynamicpreprocessor
