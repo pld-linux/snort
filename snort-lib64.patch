@@ -1,56 +1,76 @@
---- snort-2.6.1.3/configure.in.orig	2007-03-09 16:31:49.910623000 +0100
-+++ snort-2.6.1.3/configure.in	2007-03-09 16:31:49.914623000 +0100
-@@ -429,7 +429,7 @@
-     fi
-   else
- 
--    for i in lib lib/mysql; do
-+    for i in lib64 lib64/mysql; do
-       str="$MYSQL_DIR/$i/libmysqlclient.*"
-       for j in `echo $str`; do
-         if test -r $j; then
-@@ -442,7 +442,7 @@
-     if test -z "$MYSQL_LIB_DIR"; then
-       if test "$mysql_fail" != "no"; then
-         FAIL_MESSAGE("mysqlclient library", 
--                     "$MYSQL_DIR/lib $MYSQL_DIR/lib/mysql")
-+                     "$MYSQL_DIR/lib64 $MYSQL_DIR/lib64/mysql")
-       else
-         AC_MSG_RESULT(no)
+--- snort-2.8.4.1/configure.in.orig	2009-04-21 20:42:53.000000000 +0200
++++ snort-2.8.4.1/configure.in	2009-05-03 12:05:54.000000000 +0200
+@@ -678,10 +678,10 @@
+         done
        fi
-@@ -496,10 +496,10 @@
+       if test -z "$MYSQL_LIB_DIR"; then
+-        str="$i/lib/libmysqlclient.*"
++        str="$i/lib64/libmysqlclient.*"
+         for j in `echo $str`; do
+           if test -r "$j"; then
+-            MYSQL_LIB_DIR="$i/lib"
++            MYSQL_LIB_DIR="$i/lib64"
+             break 2
+           fi
+         done
+@@ -731,7 +731,7 @@
+       if test "x$mysql_fail" != "xno"; then
+         tmp=""
+         for i in $mysql_lib_directory; do
+-          tmp="$tmp $i $i/lib $i/mysql $i/mysql/lib $i/lib/mysql"
++          tmp="$tmp $i $i/lib64 $i/mysql $i/mysql/lib64 $i/lib64/mysql"
+         done
+         FAIL_MESSAGE("mysqlclient library (libmysqlclient.*)", $tmp)
+       else
+@@ -845,10 +845,10 @@
      fi
    else
  
 -    str="$ODBC_DIR/lib/libodbc.*"
 +    str="$ODBC_DIR/lib64/libodbc.*"
      for j in `echo $str`; do
-       if test -r $j; then 
+       if test -r "$j"; then 
 -        ODBC_LIB_DIR="$ODBC_DIR/lib"
 +        ODBC_LIB_DIR="$ODBC_DIR/lib64"
          ODBC_LIB="odbc"
        fi
      done
-@@ -516,7 +516,7 @@
+@@ -865,7 +865,7 @@
  
      if test -z "$ODBC_LIB_DIR"; then
-       if test "$odbc_fail" != "no"; then
+       if test "x$odbc_fail" != "xno"; then
 -        FAIL_MESSAGE("odbc library (libodbc)", "$ODBC_DIR/lib")
 +        FAIL_MESSAGE("odbc library (libodbc)", "$ODBC_DIR/lib64")
        else
          AC_MSG_RESULT(no)
        fi
-@@ -599,7 +599,7 @@
+@@ -948,7 +948,7 @@
  
    if test -z "$POSTGRESQL_DIR"; then
      for dir in $postgresql_directory; do
--       for i in lib lib/pgsql; do
-+       for i in lib64 lib64/pgsql; do
+-       for i in "lib" "lib/pgsql"; do
++       for i in "lib64" "lib64/pgsql"; do
           str="$dir/$i/libpq.*"
           for j in `echo $str`; do
             if test -r $j; then
-@@ -676,7 +676,7 @@
-     for i in rdbms/demo rdbms/public network/public; do
+@@ -959,13 +959,13 @@
+        done
+    done
+   else
+-   POSTGRESQL_LIB_DIR="$POSTGRESQL_DIR/lib"
++   POSTGRESQL_LIB_DIR="$POSTGRESQL_DIR/lib64"
+   fi
+ 
+   if test -z "$POSTGRESQL_LIB_DIR"; then
+      if test "$postgresql_fail" != "no"; then
+        FAIL_MESSAGE("postgresql library libpq",
+-       "$POSTGRESQL_DIR/lib $POSTGRESQL_DIR/lib/pgsql")
++       "$POSTGRESQL_DIR/lib64 $POSTGRESQL_DIR/lib64/pgsql")
+      else
+        AC_MSG_RESULT(no);
+      fi
+@@ -1024,7 +1024,7 @@
+     for i in "rdbms/demo" "rdbms/public" "network/public"; do
        ORACLE_CPP_FLAGS="$ORACLE_CPP_FLAGS -I$ORACLE_DIR/$i"
      done
 -    ORACLE_LIB_DIR="$ORACLE_DIR/lib"
