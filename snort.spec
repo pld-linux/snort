@@ -21,7 +21,7 @@ Summary(ru.UTF-8):	Snort - система обнаружения попыток 
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.8.4.1
-Release:	1
+Release:	0.1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
@@ -42,12 +42,13 @@ Patch1:		%{name}-lib64.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	iptables-static
 %{?with_clamav:BuildRequires:	clamav-devel}
 %{?with_inline:BuildRequires:	iptables-devel}
+BuildRequires:	iptables-static
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
 %{?with_prelude:BuildRequires:	libprelude-devel}
+BuildRequires:	libtool
 %{?with_mysql:BuildRequires:	mysql-devel}
 %{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7d
@@ -73,7 +74,6 @@ Obsoletes:	snort-rules
 Conflicts:	logrotate < 3.7-4
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_sysconfdir	/etc/snort
 %define		_bindir		%{_sbindir}
 
 %description
@@ -181,20 +181,22 @@ cd $_DIR
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{rc.d/init.d,%{name},cron.daily,logrotate.d} \
+install -d $RPM_BUILD_ROOT%{_initrddir} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/%{name} \
+	$RPM_BUILD_ROOT%{_sysconfdir}/{cron.daily,logrotate.d} \
 	$RPM_BUILD_ROOT%{_var}/log/{%{name},archive/%{name}} \
 	$RPM_BUILD_ROOT%{_datadir}/mibs/site \
-	$RPM_BUILD_ROOT%{_sysconfdir}/rules
+	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}
-install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}
-install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/rules
-install %{SOURCE4}	$RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE5}	$RPM_BUILD_ROOT/etc/logrotate.d/%{name}
-install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}
+install rules/*.config	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install etc/unicode.map	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}
+install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules
+install %{SOURCE4}	$RPM_BUILD_ROOT%{_initrddir}/%{name}
+install %{SOURCE5}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
+install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 
 mv schemas/create_mysql schemas/create_mysql.sql
 mv schemas/create_postgresql schemas/create_postgresql.sql
@@ -224,25 +226,23 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc/{AUTHORS,BUGS,CREDITS,NEWS,PROBLEMS,README*,TODO,USAGE,WISHLIST,*.pdf}
+%doc doc/{AUTHORS,BUGS,CREDITS,INSTALL,NEWS,PROBLEMS,README*,TODO,USAGE,WISHLIST,generators,*.pdf}
 %doc schemas/create_{mysql,postgresql}.sql
 %attr(755,root,root) %{_sbindir}/*
-%attr(770,root,snort) %dir %{_var}/log/snort
+%attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archive/%{name}
-%attr(750,root,snort) %dir %{_sysconfdir}
-%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/unicode.map
-%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/*.config
-%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/snort.conf
-%attr(750,root,snort) %dir %{_sysconfdir}/rules
-%attr(640,root,snort) %{_sysconfdir}/rules/*
-%attr(754,root,root) /etc/rc.d/init.d/%{name}
-%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/*
+%attr(750,root,snort) %dir %{_sysconfdir}/%{name}
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/unicode.map
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.config
+%attr(640,root,snort) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
+%attr(750,root,snort) %dir %{_sysconfdir}/%{name}/rules
+%attr(640,root,snort) %{_sysconfdir}/%{name}/rules/
+%attr(754,root,root) %{_initrddir}/%{name}
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/logrotate.d/*
 %{_mandir}/man?/*
-%dir /usr/lib/snort_dynamicengine
-%dir /usr/lib/snort_dynamicpreprocessor
-%attr(755,root,root) /usr/lib/snort_dynamicengine/libsf_engine.so*
-%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dcerpc_preproc.so*
-%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_dns_preproc.so*
-%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ftptelnet_preproc.so*
-%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_ssh_preproc.so*
-%attr(755,root,root) /usr/lib/snort_dynamicpreprocessor/libsf_smtp_preproc.so*
+%dir %{_libdir}/snort_dynamicengine
+%dir %{_libdir}/snort_dynamicpreprocessor
+%dir %{_libdir}/snort_dynamicrules
+%attr(755,root,root) %{_libdir}/snort_dynamicengine/libsf_engine.so*
+%attr(755,root,root) %{_libdir}/snort_dynamicpreprocessor/*.so*
+%attr(755,root,root) %{_libdir}/snort_dynamicrules/lib_sfdynamic_example_rule.so*
