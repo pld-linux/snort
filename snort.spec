@@ -45,6 +45,7 @@ BuildRequires:	automake
 %{?with_clamav:BuildRequires:	clamav-devel}
 %{?with_inline:BuildRequires:	iptables-devel}
 BuildRequires:	iptables-static
+BuildRequires:	libnet-devel
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
 %{?with_prelude:BuildRequires:	libprelude-devel}
