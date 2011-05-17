@@ -39,12 +39,12 @@ Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-libnet1.patch
 Patch1:		%{name}-lib64.patch
+Patch2:		%{name}-link.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_clamav:BuildRequires:	clamav-devel}
 %{?with_inline:BuildRequires:	iptables-devel}
-BuildRequires:	iptables-static
 BuildRequires:	libnet-devel
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
@@ -148,6 +148,7 @@ Snort - це сніфер пакетів, що може використовув
 %if "%{_lib}" == "lib64"
 %patch1 -p1
 %endif
+%patch2 -p1
 
 sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
 _DIR=$(pwd)
@@ -159,7 +160,7 @@ cd $_DIR
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I m4
 %{__autoconf}
 %{__automake}
 # we don't need libnsl, so don't use it
@@ -176,7 +177,8 @@ cd $_DIR
 	--with%{!?with_pgsql:out}-postgresql \
 	--with%{!?with_mysql:out}-mysql \
 	%{?with_prelude:--enable-prelude } \
-	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav}
+	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav} \
+	--enable-pthread
 
 %{__make} -j1
 
