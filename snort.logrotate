@@ -1,4 +1,5 @@
 /var/log/snort/alert {
+	su root snort
 	create 640 snort snort
 	olddir /var/log/archive/snort
 	postrotate
