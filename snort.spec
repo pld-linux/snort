@@ -1,17 +1,9 @@
 #
 # TODO: - snort rules - fix description
-#	- clamav support - cleanup, add some docs
 #	- snort_inline - prepare separate sets of config-files, rules
 #	  and startup script, adds some docs
-#	- snort 2.6
 #
 # Conditional build:
-%bcond_without	pgsql	# build without PostgreSQL storage support
-%bcond_without	mysql	# build without MySQL storage support
-%bcond_without	snmp	# build without SNMP support
-%bcond_without	inline	# build without inline support
-%bcond_without	prelude	# build without prelude support
-%bcond_without	clamav	# build w/o  ClamAV preprocessor support (anti-vir)
 %bcond_with	registered	# build with rules available for registered users
 #
 Summary:	Network intrusion detection system (IDS/IPS)
@@ -20,12 +12,12 @@ Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
 Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.8.4.1
-Release:	9
+Version:	2.9.8.2
+Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
-Source0:	http://www.snort.org/dl/%{name}-%{version}.tar.gz
-# Source0-md5:	63f4e76ae96a2d133f4c7b741bad5458
+Source0:	http://www.snort.org/downloads/snort/%{name}-%{version}.tar.gz
+# Source0-md5:	b5005f88a01b42ff7ee0defb94161ffc
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
@@ -37,24 +29,18 @@ Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Communit
 # Source3-md5:	f236b8a4ac12e99d3e7bd81bf3b5a482
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
-Patch0:		%{name}-libnet1.patch
-Patch1:		%{name}-lib64.patch
-Patch2:		%{name}-link.patch
+Patch0:		%{name}-link.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_clamav:BuildRequires:	clamav-devel}
-%{?with_inline:BuildRequires:	iptables-devel}
+BuildRequires:	daq-static
+BuildRequires:	libdnet-devel
 BuildRequires:	libnet-devel
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
-%{?with_prelude:BuildRequires:	libprelude-devel}
 BuildRequires:	libtool
-%{?with_mysql:BuildRequires:	mysql-devel}
-%{?with_snmp:BuildRequires:	net-snmp-devel >= 5.0.7}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pcre-devel
-%{?with_pgsql:BuildRequires:	postgresql-devel}
 BuildRequires:	rpmbuild(macros) >= 1.202
 BuildRequires:	rpmbuild(macros) >= 1.268
 BuildRequires:	zlib-devel
@@ -68,8 +54,6 @@ Requires(pre):	/usr/sbin/useradd
 Requires:	libnet1 = 1.0.2a
 Requires:	rc-scripts >= 0.2.0
 Provides:	group(snort)
-%{?with_mysql:Provides:	snort(mysql) = %{version}}
-%{?with_pgsql:Provides:	snort(pgsql) = %{version}}
 Provides:	user(snort)
 Obsoletes:	snort-rules
 Conflicts:	logrotate < 3.7-4
@@ -145,10 +129,6 @@ Snort - це сніфер пакетів, що може використовув
 %prep
 %setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
 %patch0 -p1
-%if "%{_lib}" == "lib64"
-%patch1 -p1
-%endif
-%patch2 -p1
 
 sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
 _DIR=$(pwd)
@@ -166,19 +146,11 @@ cd $_DIR
 # we don't need libnsl, so don't use it
 %configure \
 	no_libnsl=yes \
-	--enable-smbalerts \
-	--enable-flexresp \
-	%{?with_inline:--enable-inline } \
-	%{?with_inline:--with-libipq-includes=%{_includedir}/libipq }  \
-	--with-libnet-includes=%{_includedir} \
-	--with%{!?with_snmp:out}-snmp \
-	--without-odbc \
-	--enable-perfmonitor \
-	--with%{!?with_pgsql:out}-postgresql \
-	--with%{!?with_mysql:out}-mysql \
-	%{?with_prelude:--enable-prelude } \
-	%{?with_clamav:--enable-clamav --with-clamav-defdir=/var/lib/clamav} \
-	--enable-pthread
+	--enable-pthread \
+	--enable-so-with-static-lib \
+	--enable-control-socket \
+	--enable-side-channel \
+	--enable-build-dynamic-examples
 
 %{__make} -j1
 
@@ -199,9 +171,6 @@ install rules/*.rules	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}/rules
 install %{SOURCE4}	$RPM_BUILD_ROOT%{_initrddir}/%{name}
 install %{SOURCE5}	$RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
 install rules/snort.conf	$RPM_BUILD_ROOT%{_sysconfdir}/%{name}
-
-mv schemas/create_mysql schemas/create_mysql.sql
-mv schemas/create_postgresql schemas/create_postgresql.sql
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -229,7 +198,6 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc doc/{AUTHORS,BUGS,CREDITS,INSTALL,NEWS,PROBLEMS,README*,TODO,USAGE,WISHLIST,generators,*.pdf}
-%doc schemas/create_{mysql,postgresql}.sql
 %attr(755,root,root) %{_sbindir}/*
 %attr(770,root,snort) %dir %{_var}/log/%{name}
 %attr(770,root,snort) %dir %{_var}/log/archive/%{name}
@@ -244,7 +212,5 @@ fi
 %{_mandir}/man?/*
 %dir %{_libdir}/snort_dynamicengine
 %dir %{_libdir}/snort_dynamicpreprocessor
-%dir %{_libdir}/snort_dynamicrules
 %attr(755,root,root) %{_libdir}/snort_dynamicengine/libsf_engine.so*
 %attr(755,root,root) %{_libdir}/snort_dynamicpreprocessor/*.so*
-%attr(755,root,root) %{_libdir}/snort_dynamicrules/lib_sfdynamic_example_rule.so*

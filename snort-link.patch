@@ -1,11 +1,11 @@
---- snort-2.8.4.1/src/dynamic-examples/dynamic-rule/Makefile.am~	2007-10-11 18:07:25.000000000 +0200
-+++ snort-2.8.4.1/src/dynamic-examples/dynamic-rule/Makefile.am	2011-05-17 16:24:59.800000206 +0200
+--- snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am~	2011-06-08 09:33:10.000000000 +0900
++++ snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am	2016-04-10 10:02:21.076065236 +0900
 @@ -7,7 +7,7 @@
  
  noinst_lib_LTLIBRARIES = lib_sfdynamic_example_rule.la
  
--lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic
-+lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic -L../../dynamic-plugins/sf_engine/.libs -lsf_engine
+-lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic @XCCFLAGS@
++lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic @XCCFLAGS@ -L../../dynamic-plugins/sf_engine/.libs -lsf_engine
  
  BUILT_SOURCES = \
  sfsnort_dynamic_detection_lib.c \
