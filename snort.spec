@@ -30,6 +30,7 @@ Source3:	http://www.snort.org/pub-bin/downloads.cgi/Download/comm_rules/Communit
 Source4:	%{name}.init
 Source5:	%{name}.logrotate
 Patch0:		%{name}-link.patch
+Patch1:		%{name}-libdir.patch
 URL:		http://www.snort.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -129,6 +130,7 @@ Snort - це сніфер пакетів, що може використовув
 %prep
 %setup -q %{!?with_registered:-a1} %{?with_registered:-a2} -a3
 %patch0 -p1
+%patch1 -p1
 
 sed -i "s#var\ RULE_PATH.*#var RULE_PATH /etc/snort/rules#g" rules/snort.conf
 _DIR=$(pwd)
@@ -212,5 +214,7 @@ fi
 %{_mandir}/man?/*
 %dir %{_libdir}/snort_dynamicengine
 %dir %{_libdir}/snort_dynamicpreprocessor
+%dir %{_libdir}/snort_dynamicrules
 %attr(755,root,root) %{_libdir}/snort_dynamicengine/libsf_engine.so*
 %attr(755,root,root) %{_libdir}/snort_dynamicpreprocessor/*.so*
+%attr(755,root,root) %{_libdir}/snort_dynamicrules/lib_sfdynamic_example_rule.so*

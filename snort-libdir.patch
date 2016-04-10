@@ -1,0 +1,11 @@
+--- snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am~	2016-04-10 10:02:59.000000000 +0900
++++ snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am	2016-04-10 10:20:43.733354277 +0900
+@@ -3,7 +3,7 @@
+ 
+ INCLUDES = -I../include
+ 
+-noinst_libdir = ${exec_prefix}/lib/snort_dynamicrules
++noinst_libdir = ${libdir}/snort_dynamicrules
+ 
+ noinst_lib_LTLIBRARIES = lib_sfdynamic_example_rule.la
+ 
