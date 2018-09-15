@@ -13,7 +13,7 @@ Summary(ru.UTF-8):	Snort - система обнаружения попыток 
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
 Version:	2.9.8.2
-Release:	1
+Release:	2
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/downloads/snort/%{name}-%{version}.tar.gz
