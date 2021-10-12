@@ -1,11 +1,30 @@
 --- snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am~	2011-06-08 09:33:10.000000000 +0900
 +++ snort-2.9.8.2/src/dynamic-examples/dynamic-rule/Makefile.am	2016-04-10 10:02:21.076065236 +0900
-@@ -7,7 +7,7 @@
- 
+@@ -7,6 +7,7 @@
  noinst_lib_LTLIBRARIES = lib_sfdynamic_example_rule.la
  
--lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic @XCCFLAGS@
-+lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic @XCCFLAGS@ -L../../dynamic-plugins/sf_engine/.libs -lsf_engine
+ lib_sfdynamic_example_rule_la_LDFLAGS = -export-dynamic @XCCFLAGS@
++lib_sfdynamic_example_rule_la_LIBADD = $(top_srcdir)/src/dynamic-plugins/sf_engine/libsf_engine.la
  
  BUILT_SOURCES = \
  sfsnort_dynamic_detection_lib.c \
+--- snort-2.9.18.1/src/dynamic-plugins/sf_engine/examples/Makefile.am.orig	2021-08-18 18:28:53.000000000 +0200
++++ snort-2.9.18.1/src/dynamic-plugins/sf_engine/examples/Makefile.am	2021-10-12 21:40:48.123063346 +0200
+@@ -5,6 +5,7 @@
+ lib_LTLIBRARIES = libsf_sorules.la
+ 
+ libsf_sorules_la_LDFLAGS = -export-dynamic -module @XCCFLAGS@
++libsf_sorules_la_LIBADD = $(top_srcdir)/src/dynamic-plugins/sf_engine/libsf_engine.la
+ 
+ libsf_sorules_la_SOURCES = \
+ sfsnort_dynamic_detection_lib.c \
+--- snort-2.9.18.1/src/dynamic-plugins/sf_engine/Makefile.am.orig	2021-08-18 18:28:53.000000000 +0200
++++ snort-2.9.18.1/src/dynamic-plugins/sf_engine/Makefile.am	2021-10-12 21:40:48.123063346 +0200
+@@ -213,7 +213,5 @@
+ sha2.c: ../../sfutil/sha2.c
+ 	@src_file=$?; dst_file=$@; $(copy_files)
+ 
+-SUBDIRS = examples
+-
+ clean-local:
+ 	rm -rf sfhashfcn.c sfhashfcn.c.new sfghash.c sfprimetable.c sf_ip.c sf_ip.h sf_iph.h ipv6_port.h snort_debug.h snort_debug.h.new sfprimetable.h sfghash.h ipv6_port.h.new sfhashfcn.h sf_types.h sf_protocols.h preprocids.h sf_sechash.h sf_sechash.c md5.h md5.c sha2.h sha2.c

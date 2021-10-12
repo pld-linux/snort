@@ -12,12 +12,12 @@ Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
 Summary(ru.UTF-8):	Snort - система обнаружения попыток вторжения в сеть
 Summary(uk.UTF-8):	Snort - система виявлення спроб вторгнення в мережу
 Name:		snort
-Version:	2.9.8.2
-Release:	2
+Version:	2.9.18.1
+Release:	1
 License:	GPL v2 (vrt rules on VRT-License)
 Group:		Networking
 Source0:	http://www.snort.org/downloads/snort/%{name}-%{version}.tar.gz
-# Source0-md5:	b5005f88a01b42ff7ee0defb94161ffc
+# Source0-md5:	2b4e30300ef6feca1f60c267e727c6c0
 Source1:	http://www.snort.org/pub-bin/downloads.cgi/Download/vrt_pr/%{name}rules-pr-2.4.tar.gz
 # Source1-md5:	35d9a2486f8c0280bb493aa03c011927
 %if %{with registered}
@@ -36,9 +36,11 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	daq-static
 BuildRequires:	libdnet-devel
+BuildRequires:	libnetfilter_queue-devel
 BuildRequires:	libnet-devel
 BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
+BuildRequires:	libtirpc-devel
 BuildRequires:	libtool
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pcre-devel
@@ -141,6 +143,7 @@ done
 cd $_DIR
 
 %build
+export CFLAGS="%{rpmcflags} -I/usr/include/tirpc"
 %{__libtoolize}
 %{__aclocal} -I m4
 %{__autoconf}
@@ -154,7 +157,8 @@ cd $_DIR
 	--enable-side-channel \
 	--enable-build-dynamic-examples
 
-%{__make} -j1
+%{__make}
+%{__make} -C src/dynamic-plugins/sf_engine/examples
 
 %install
 rm -rf $RPM_BUILD_ROOT
