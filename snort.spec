@@ -5,7 +5,11 @@
 #
 # Conditional build:
 %bcond_with	registered	# build with rules available for registered users
+%bcond_without	open_appid	# build without application identification support
 #
+%ifarch x32
+%undefine	with_open_appid
+%endif
 Summary:	Network intrusion detection system (IDS/IPS)
 Summary(pl.UTF-8):	System wykrywania intruzów w sieciach (IDS/IPS)
 Summary(pt_BR.UTF-8):	Ferramenta de detecção de intrusos
@@ -42,6 +46,7 @@ BuildRequires:	libnet1-devel = 1.0.2a
 BuildRequires:	libpcap-devel
 BuildRequires:	libtirpc-devel
 BuildRequires:	libtool
+%{?with_open_appid:BuildRequires:	luajit-devel}
 BuildRequires:	openssl-devel >= 0.9.7d
 BuildRequires:	pcre-devel
 BuildRequires:	rpmbuild(macros) >= 1.202
@@ -151,6 +156,7 @@ export CFLAGS="%{rpmcflags} -I/usr/include/tirpc"
 # we don't need libnsl, so don't use it
 %configure \
 	no_libnsl=yes \
+	%{!?with_open_appid:--disable-open-appid} \
 	--enable-pthread \
 	--enable-so-with-static-lib \
 	--enable-control-socket \
